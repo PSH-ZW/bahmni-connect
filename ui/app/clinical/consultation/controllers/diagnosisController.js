@@ -10,7 +10,8 @@ angular.module('bahmni.clinical')
             $scope.certaintyOptions = ['CONFIRMED', 'PRESUMED'];
 
             $scope.getDiagnosis = function (params) {
-                return diagnosisService.getAllFor(params.term);
+                var diagnosisMetaData = $scope.diagnosisMetaData || {};
+                return diagnosisService.getAllFor(params.term, diagnosisMetaData.setMembers);
             };
 
             var _canAdd = function (diagnosis) {

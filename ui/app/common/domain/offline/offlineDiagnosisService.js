@@ -1,8 +1,11 @@
 'use strict';
 
 angular.module('bahmni.common.domain')
-    .service('diagnosisService', ['$q', 'offlineEncounterServiceStrategy',
-        function ($q, offlineEncounterServiceStrategy) {
+    .service('diagnosisService', ['$q', 'offlineEncounterServiceStrategy', '$bahmniTranslate', 'offlineDbService', 'androidDbService', 'offlineService',
+        function ($q, offlineEncounterServiceStrategy, $bahmniTranslate, offlineDbService, androidDbService, offlineService) {
+            if (offlineService.isAndroidApp()) {
+                offlineDbService = androidDbService;
+            }
             var filterAndSortDiagnosis = function (diagnoses) {
                 diagnoses = _.filter(diagnoses, function (singleDiagnosis) {
                     return singleDiagnosis.revised == false;
