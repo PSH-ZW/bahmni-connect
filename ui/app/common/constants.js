@@ -275,7 +275,7 @@ Bahmni.Common = Bahmni.Common || {};
         offlineErrorMessages: offlineErrorMessages,
         syncButtonConfiguration: syncButtonConfiguration,
         syncStatusMessages: syncStatusMessages,
-        uuidRegex: "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
+        uuidRegex: "[0-9a-fA-F\-]{36}",
         offlineBahmniEncounterUrl: "/openmrs/ws/rest/v1/bahmnicore/bahmniencounter/",
         offlineDrugUrl: "/openmrs/ws/rest/v1/drug/",
         eventlogFilterUrl: hostUrl + "/openmrs/ws/rest/v1/eventlog/filter",

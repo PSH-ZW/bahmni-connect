@@ -7,7 +7,7 @@ angular.module('bahmni.registration')
 
         var search = function (query, identifier, addressFieldName, addressFieldValue, customAttributeValue,
                                offset, customAttributeFields, programAttributeFieldName, programAttributeFieldValue, addressSearchResultsConfig,
-                               patientSearchResultsConfig, filterOnAllIdentifiers) {
+                               patientSearchResultsConfig, filterOnAllIdentifiers, isRemoteSearch) {
             var config = {
                 params: {
                     q: query,
@@ -27,7 +27,36 @@ angular.module('bahmni.registration')
                 },
                 withCredentials: true
             };
+            if (isRemoteSearch) {
+                return remoteSearch(config);
+            }
             return patientServiceStrategy.search(config);
+        };
+
+        var remoteSearch = function (config) {
+            var defer = $q.defer();
+            var patientSearchUrl = Bahmni.Common.Constants.bahmniSearchUrl + "/patient";
+            var onResults = function (result) {
+                defer.resolve(result);
+            };
+            $http.get(patientSearchUrl, config).success(onResults)
+                .error(function (error) {
+                    defer.reject(error);
+                });
+            return defer.promise;
+        };
+
+        this.getEncountersByPatientUuid = function (patientUuid) {
+            var defer = $q.defer();
+            $http.get(Bahmni.Common.Constants.encounterUrl, {
+                params: { patient: patientUuid },
+                withCredentials: true
+            }).success(function (result) {
+                defer.resolve(result);
+            }).error(function (error) {
+                defer.reject(error);
+            });
+            return defer.promise;
         };
 
         var searchByIdentifier = function (identifier) {
@@ -43,6 +72,21 @@ angular.module('bahmni.registration')
 
         var get = function (uuid) {
             return patientServiceStrategy.get(uuid);
+        };
+
+        var getPatientFromRemote = function (uuid) {
+            var url = openmrsUrl + "/ws/rest/v1/patient/" + uuid;
+            var config = {
+                method: "GET",
+                params: {v: "full"},
+                withCredentials: true
+            };
+
+            var defer = $q.defer();
+            $http.get(url, config).success(function (result) {
+                defer.resolve(result);
+            });
+            return defer.promise;
         };
 
         var create = function (patient, jumpAccepted) {
@@ -72,6 +116,7 @@ angular.module('bahmni.registration')
             create: create,
             update: update,
             get: get,
+            getPatientFromRemote: getPatientFromRemote,
             updateImage: updateImage
         };
     }]);

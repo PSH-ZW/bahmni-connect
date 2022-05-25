@@ -2,8 +2,8 @@
 
 angular.module('bahmni.registration')
     .controller('SearchPatientController', ['$rootScope', '$scope', '$location', '$window', 'spinner', 'patientService', 'appService',
-        'messagingService', '$translate', '$filter',
-        function ($rootScope, $scope, $location, $window, spinner, patientService, appService, messagingService, $translate, $filter) {
+        'messagingService', '$translate', '$filter', 'offlineSyncService', 'encounterService',
+        function ($rootScope, $scope, $location, $window, spinner, patientService, appService, messagingService, $translate, $filter, offlineSyncService, encounterService) {
             $scope.results = [];
             $scope.extraIdentifierTypes = _.filter($rootScope.patientConfiguration.identifierTypes, function (identifierType) {
                 return !identifierType.primary;
@@ -23,6 +23,16 @@ angular.module('bahmni.registration')
                     if (addressLevel.addressField === columnCamelCase) { columnName = addressLevel.name; }
                 });
                 return columnName;
+            };
+
+            $scope.downloadPatient = function (patient) {
+                patientService.getPatientFromRemote(patient.uuid).then(function (response) {
+                    offlineSyncService.saveData({category: 'patient'}, { data: response }).then(function () {
+                       // encounterService.findByPatientUuid(patient.uuid).then(function (result) {
+                       //    console.log('result', result);
+                       // });
+                    });
+                });
             };
 
             var hasSearchParameters = function () {
@@ -59,7 +69,9 @@ angular.module('bahmni.registration')
                         $scope.programAttributesSearchConfig.field,
                         $scope.searchParameters.programAttributeFieldValue,
                         $scope.addressSearchResultsConfig.fields,
-                        $scope.personSearchResultsConfig.fields
+                        $scope.personSearchResultsConfig.fields,
+                        null,
+                        $scope.searchParameters.remoteSearch || false
                     ).then(function (response) {
                         mapExtraIdentifiers(response);
                         mapCustomAttributesSearchResults(response);
@@ -188,8 +200,8 @@ angular.module('bahmni.registration')
                 if (_.isEmpty(patientSearchResultConfigs)) {
                     resultsConfigNotFound = true;
                     patientSearchResultConfigs.address = {"fields": allSearchConfigs.address ? [allSearchConfigs.address.field] : {}};
-                    patientSearchResultConfigs.personAttributes
-                        = {fields: allSearchConfigs.customAttributes ? allSearchConfigs.customAttributes.fields : {}};
+                    patientSearchResultConfigs.personAttributes =
+                        {fields: allSearchConfigs.customAttributes ? allSearchConfigs.customAttributes.fields : {}};
                 } else {
                     if (!patientSearchResultConfigs.address) patientSearchResultConfigs.address = {};
                     if (!patientSearchResultConfigs.personAttributes) patientSearchResultConfigs.personAttributes = {};

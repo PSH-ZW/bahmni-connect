@@ -36,6 +36,10 @@
                 </article>
 
                 <article class="fl">
+                    <label for="name"><strong>Remote Search</strong></label>
+                    <input style="margin-top: 10px;" tabindex="4" type="checkbox" id="remoteSearch" ng-model="searchParameters.remoteSearch"/>
+                </article>
+                <article class="fl">
                     <div class="reg-srch-btn">
                         <button tabindex="7" type="submit" ng-disabled="disableSearchButton()">{{ ::'REGISTRATION_LABEL_SEARCH' | translate}}</button>
                     </div>
@@ -66,6 +70,7 @@
                 <th ng-repeat = "field in ::addressSearchResultsConfig.fields"><strong>{{::convertToTableHeader(getAddressColumnName(field))}}</strong></th>
                 <th><strong>{{ ::'REGISTRATION_LABEL_REGISTRATION_DATE' | translate}}</strong></th>
                 <th ng-if="::programAttributesSearchConfig.show"><strong>{{::convertToTableHeader(programAttributesSearchConfig.label)}}</strong></th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -86,6 +91,7 @@
                 <td ng-repeat = "field in ::addressSearchResultsConfig.fields">{{::result.addressFieldValue[field] || ""}}</td>
                 <td>{{::result.dateCreated | bahmniDate}}</td>
                 <td ng-if="::programAttributesSearchConfig.show">{{getProgramAttributeValues(result) | bahmniDateInStrictMode}}</td>
+                <td><button ng-click="downloadPatient(result)">Download</button></td>
             </tr>
             </tbody>
         </table>

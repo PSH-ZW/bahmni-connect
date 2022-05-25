@@ -25,10 +25,10 @@ angular.module('bahmni.clinical')
                         name: "All Observation Templates",
                         v: "custom:" + customRepresentation
                     }).then(function (response) {
-                        var allTemplates = response.data.results[0].setMembers;
-                        createConceptSections(allTemplates);
-                        $scope.allTemplates = getSelectedObsTemplates(allConceptSections);
-                        $scope.uniqueTemplates = _.uniqBy($scope.allTemplates, 'label');
+                        // var allTemplates = response.data.results[0].setMembers;
+                        // createConceptSections(allTemplates);
+                        // $scope.allTemplates = getSelectedObsTemplates(allConceptSections);
+                        // $scope.uniqueTemplates = _.uniqBy($scope.allTemplates, 'label');
                         if ($state.params.programUuid) {
                             showOnlyTemplatesFilledInProgram();
                         }

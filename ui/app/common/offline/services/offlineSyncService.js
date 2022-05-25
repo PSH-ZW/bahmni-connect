@@ -144,12 +144,12 @@ angular.module('bahmni.common.offline')
                         promises.push(syncForCategory(category, isInitSync));
                     }
                 });
-                if (isInitSync && _.indexOf(categories, 'patient') !== -1) {
-                    var patientPromise = savePatientDataFromFile().then(function (uuid) {
-                        return updateMarker({uuid: uuid}, "patient");
-                    });
-                    promises.push(patientPromise);
-                }
+                // if (isInitSync && _.indexOf(categories, 'patient') !== -1) {
+                //     var patientPromise = savePatientDataFromFile().then(function (uuid) {
+                //         return updateMarker({uuid: uuid}, "patient");
+                //     });
+                //     promises.push(patientPromise);
+                // }
                 return $q.all(promises);
             };
 
@@ -353,7 +353,8 @@ angular.module('bahmni.common.offline')
             };
 
             return {
-                sync: sync
+                sync: sync,
+                saveData: saveData
             };
         }
     ]);

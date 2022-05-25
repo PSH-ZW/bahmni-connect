@@ -53,7 +53,7 @@ angular.module('bahmni.common.domain')
             };
 
             this.getDiagnosisConceptSet = function () {
-                return $q.when({"data": {}});
+                return offlineDbService.getConceptByName('offline-diagnosis');
             };
 
             this.getPastAndCurrentDiagnoses = function (patientUuid, encounterUuid) {
