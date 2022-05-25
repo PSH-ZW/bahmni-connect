@@ -308,6 +308,48 @@ angular.module('bahmni.clinical').controller('ConsultationController',
                 $scope.currentBoard.isSelectedTab = true;
                 return getUrl(board);
             };
+            var updateConsultationObject = function (tempConsultation) {
+                if (tempConsultation.encounterUuid) {
+                    var diagnosesFromDb = [];
+                    var drugsFromDb = [];
+                    encounterService.findByEncounterUuid(tempConsultation.encounterUuid).then(function (encounter) {
+                        if (encounter) {
+                            diagnosesFromDb = encounter.bahmniDiagnoses;
+                            drugsFromDb = encounter.drugOrders;
+                        }
+                    });
+                    var newlyAddedDiagnoses = tempConsultation.newlyAddedDiagnoses || [];
+                    tempConsultation.newlyAddedDiagnoses = newlyAddedDiagnoses.map(function (diagnosis) {
+                        if (diagnosis.isEmpty()) {
+                            return diagnosis;
+                        }
+                        if (diagnosesFromDb.length === 0) {
+                            return diagnosis;
+                        } else {
+                            _.map(diagnosesFromDb, function (fromDb) {
+                                if (diagnosis.codedAnswer && fromDb.codedAnswer && (diagnosis.codedAnswer.uuid === fromDb.codedAnswer.uuid)) {
+                                    diagnosis.existingObs = fromDb.existingObs;
+                                    diagnosis.previousObs = fromDb.previousObs;
+                                    return diagnosis;
+                                }
+                            });
+                        }
+                    });
+                    var newlyAddedTreatments = tempConsultation.newlyAddedTreatments || [];
+                    tempConsultation.newlyAddedTreatments = newlyAddedTreatments.map(function (treatment) {
+                        _.map(drugsFromDb, function (fromDb) {
+                            if (fromDb.uuid || fromDb.previousOrderUuid) {
+                                if (treatment.drug && fromDb.drug && (treatment.drug.uuid === fromDb.drug.uuid)) {
+                                    treatment.uuid = fromDb.uuid;
+                                    treatment.previousOrderUuid = fromDb.previousOrderUuid;
+                                    return treatment;
+                                }
+                            }
+                        });
+                    });
+                }
+                return tempConsultation;
+            };
 
             var preSavePromise = function () {
                 var deferred = $q.defer();
@@ -317,7 +359,7 @@ angular.module('bahmni.clinical').controller('ConsultationController',
                 $scope.lastvisited = $scope.consultation.lastvisited;
                 var selectedObsTemplates = $scope.consultation.selectedObsTemplates;
                 var selectedFormTemplates = _.filter(selectedObsTemplates, function (obsTemplate) { return obsTemplate.formUuid; });
-                var tempConsultation = angular.copy($scope.consultation);
+                var tempConsultation = updateConsultationObject(angular.copy($scope.consultation));
                 tempConsultation.observations = observationFilter.filter(tempConsultation.observations);
                 tempConsultation.consultationNote = observationFilter.filter([tempConsultation.consultationNote])[0];
                 tempConsultation.labOrderNote = observationFilter.filter([tempConsultation.labOrderNote])[0];
@@ -372,17 +414,17 @@ angular.module('bahmni.clinical').controller('ConsultationController',
                 var conflictingDiagnosisValidationMessage;
                 var addedDiagnoses = [];
                 consulatation.newlyAddedDiagnoses.map(function (drug) {
-                    if (addedDiagnoses.indexOf(drug.codedAnswer.uuid) !== -1) {
-                        conflictingDiagnosisValidationMessage = "Diagnosis " + drug.codedAnswer.name + " is already added.";
+                    if (addedDiagnoses.indexOf(drug.freeTextAnswer ? drug.getDisplayName() : drug.codedAnswer.uuid) !== -1) {
+                        conflictingDiagnosisValidationMessage = "Diagnosis " + drug.getDisplayName() + " is already added.";
                     } else {
-                        addedDiagnoses = addedDiagnoses.concat(drug.codedAnswer.uuid);
+                        addedDiagnoses = addedDiagnoses.concat(drug.isNonCodedAnswer ? drug.getDisplayName() : drug.codedAnswer.uuid);
                     }
                 });
                 consulatation.savedDiagnosesFromCurrentEncounter.map(function (drug) {
-                    if (addedDiagnoses.indexOf(drug.codedAnswer.uuid) !== -1) {
-                        conflictingDiagnosisValidationMessage = "Diagnosis " + drug.codedAnswer.name + " is already added.";
+                    if (addedDiagnoses.indexOf(drug.freeTextAnswer ? drug.getDisplayName() : drug.codedAnswer.uuid) !== -1) {
+                        conflictingDiagnosisValidationMessage = "Diagnosis " + drug.getDisplayName() + " is already added.";
                     } else {
-                        addedDiagnoses = addedDiagnoses.concat(drug.codedAnswer.uuid);
+                        addedDiagnoses = addedDiagnoses.concat(drug.isNonCodedAnswer ? drug.getDisplayName() : drug.codedAnswer.uuid);
                     }
                 });
                 return conflictingDiagnosisValidationMessage;

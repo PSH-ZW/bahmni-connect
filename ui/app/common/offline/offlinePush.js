@@ -60,7 +60,13 @@ angular.module('bahmni.common.offline')
                     };
 
                     if (event.data.type && event.data.type == "encounter") {
-                        return $http.post(Bahmni.Common.Constants.bahmniEncounterUrl, response.encounter, config);
+                        var encounter = response.encounter;
+                        var changedDrugs = [];
+                        changedDrugs = encounter.drugOrders.filter(function (drug) {
+                            return drug.uuid === undefined || drug.uuid === null;
+                        });
+                        encounter.drugOrders = changedDrugs;
+                        return $http.post(Bahmni.Common.Constants.bahmniEncounterUrl, encounter, config);
                     } else if (event.data.type && event.data.type === "Error") {
                         return $http.post(Bahmni.Common.Constants.loggingUrl, angular.toJson(response));
                     } else {

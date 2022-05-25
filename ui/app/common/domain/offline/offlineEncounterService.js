@@ -151,7 +151,7 @@ angular.module('bahmni.common.domain')
             };
 
             this.findByEncounterUuid = function (encounterUuid) {
-                return $q.when({"data": {"results": []}});
+                return offlineDbService.getEncounterByEncounterUuid(encounterUuid);
             };
 
             this.getEncountersForEncounterType = function (patientUuid, encounterTypeUuid) {
