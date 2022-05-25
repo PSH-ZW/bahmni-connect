@@ -29,3 +29,6 @@ node_modules
 **/.idea/*
 ui/common.background.min.js
 ui/common.offline.min.js
+ui/androidDist/
+ui/bahmni-connect-apps.zip
+ui/bahmni-connect-apps/
