@@ -373,14 +373,14 @@ angular.module('bahmni.clinical').controller('ConsultationController',
                 var addedDiagnoses = [];
                 consulatation.newlyAddedDiagnoses.map(function (drug) {
                     if (addedDiagnoses.indexOf(drug.codedAnswer.uuid) !== -1) {
-                        conflictingDiagnosisValidationMessage = "Diagnosis " + drug.codedAnswer.name + " is already added."
+                        conflictingDiagnosisValidationMessage = "Diagnosis " + drug.codedAnswer.name + " is already added.";
                     } else {
                         addedDiagnoses = addedDiagnoses.concat(drug.codedAnswer.uuid);
                     }
                 });
                 consulatation.savedDiagnosesFromCurrentEncounter.map(function (drug) {
                     if (addedDiagnoses.indexOf(drug.codedAnswer.uuid) !== -1) {
-                        conflictingDiagnosisValidationMessage = "Diagnosis " + drug.codedAnswer.name + " is already added."
+                        conflictingDiagnosisValidationMessage = "Diagnosis " + drug.codedAnswer.name + " is already added.";
                     } else {
                         addedDiagnoses = addedDiagnoses.concat(drug.codedAnswer.uuid);
                     }

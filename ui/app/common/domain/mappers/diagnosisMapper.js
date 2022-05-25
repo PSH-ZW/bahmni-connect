@@ -10,7 +10,8 @@ Bahmni.DiagnosisMapper = function (diagnosisStatus) {
                 uuid: undefined
             };
         }
-        var mappedDiagnosis = angular.extend(new Bahmni.Common.Domain.Diagnosis(), diagnosis);
+        var mappedDiagnosis = angular.extend(new Bahmni.Common.Domain.Diagnosis(diagnosis.codedAnswer, diagnosis.order,
+            diagnosis.certainty, diagnosis.existingObs, diagnosis.freeTextAnswer, diagnosis.diagnosisDateTime), diagnosis);
         if (mappedDiagnosis.firstDiagnosis) {
             mappedDiagnosis.firstDiagnosis = mapDiagnosis(mappedDiagnosis.firstDiagnosis);
         }
