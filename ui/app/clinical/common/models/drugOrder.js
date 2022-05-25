@@ -30,6 +30,8 @@ Bahmni.Clinical.DrugOrder = (function () {
         var route = drugOrderData.route;
 
         var drugOrder = new DrugOrder({
+            uuid: drugOrderData.uuid,
+            visit: drugOrderData.visit,
             careSetting: "OUTPATIENT",
             drug: drugOrderData.drug,
             drugNonCoded: drugOrderData.drugNonCoded,

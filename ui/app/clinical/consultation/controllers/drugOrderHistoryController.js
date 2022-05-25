@@ -62,7 +62,7 @@ angular.module('bahmni.clinical')
                     return [];
                 }
                 var drugOrderGroupedByDate = _.groupBy(prescribedDrugOrders, function (drugOrder) {
-                    return DateUtil.parse(drugOrder.visit.startDateTime);
+                    return drugOrder.visit ? DateUtil.parse(drugOrder.visit.startDateTime) : DateUtil.now();
                 });
 
                 var createDrugOrder = function (drugOrder) {

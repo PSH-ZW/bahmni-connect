@@ -39,7 +39,7 @@ Bahmni.DiagnosisMapper = function (diagnosisStatus) {
     self.mapPastDiagnosis = function (diagnoses, currentEncounterUuid) {
         var pastDiagnosesResponse = [];
         diagnoses.forEach(function (diagnosis) {
-            if (diagnosis.encounterUuid !== currentEncounterUuid) {
+            if (diagnosis.encounterUuid && (diagnosis.encounterUuid !== currentEncounterUuid)) {
                 diagnosis.previousObs = diagnosis.existingObs;
                 diagnosis.existingObs = null;
                 diagnosis.inCurrentEncounter = undefined;
@@ -52,7 +52,7 @@ Bahmni.DiagnosisMapper = function (diagnosisStatus) {
     self.mapSavedDiagnosesFromCurrentEncounter = function (diagnoses, currentEncounterUuid) {
         var savedDiagnosesFromCurrentEncounter = [];
         diagnoses.forEach(function (diagnosis) {
-            if (diagnosis.encounterUuid === currentEncounterUuid) {
+            if (!diagnosis.encounterUuid || (diagnosis.encounterUuid === currentEncounterUuid)) {
                 diagnosis.inCurrentEncounter = true;
                 savedDiagnosesFromCurrentEncounter.push(diagnosis);
             }

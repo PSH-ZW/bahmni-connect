@@ -15,6 +15,7 @@ angular.module('bahmni.clinical')
             $scope.addTreatment = true;
             $scope.canOrderSetBeAdded = true;
             $scope.isSearchDisabled = false;
+            $scope.drugMetaData = [];
 
             $scope.getFilteredOrderSets = function (searchTerm) {
                 if (searchTerm && searchTerm.length >= 3) {
@@ -41,7 +42,7 @@ angular.module('bahmni.clinical')
             }
             if (treatmentConfig.isAutoCompleteForAllConcepts()) {
                 $scope.getDrugs = function (request) {
-                    return drugService.search(request.term);
+                    return drugService.searchDrugWithName(request.term, $scope.drugMetaData);
                 };
             }
             if (treatmentConfig.isAutoCompleteForGivenConceptSet()) {
@@ -585,7 +586,7 @@ angular.module('bahmni.clinical')
                 $scope.consultation.newlyAddedTreatments = allTreatmentsAcrossTabs.concat(includedOrderSetTreatments);
                 if ($scope.consultation.discontinuedDrugs) {
                     $scope.consultation.discontinuedDrugs.forEach(function (discontinuedDrug) {
-                        var removableOrder = _.find(activeDrugOrders, {uuid: discontinuedDrug.uuid});
+                        var removableOrder = _.find(activeDrugOrders, {drug: { uuid: discontinuedDrug.drug.uuid}});
                         if (discontinuedDrug) {
                             removableOrder.orderReasonText = discontinuedDrug.orderReasonText;
                             removableOrder.dateActivated = discontinuedDrug.dateStopped;
@@ -752,6 +753,12 @@ angular.module('bahmni.clinical')
                 mergeActiveAndScheduledWithDiscontinuedOrders();
 
                 $scope.treatmentConfig = treatmentConfig;// $scope.treatmentConfig used only in UI
+                
+                drugService.getDrugMetaData().then(function (result) {
+                    if (result.answers) {
+                        $scope.drugMetaData = result.answers;
+                    }
+                });
             };
             init();
         }]);

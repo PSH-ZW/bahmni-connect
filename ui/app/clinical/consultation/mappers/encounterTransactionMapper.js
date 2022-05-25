@@ -12,7 +12,7 @@ Bahmni.Clinical.EncounterTransactionMapper = function () {
         }
         if (consultation.savedDiagnosesFromCurrentEncounter) {
             consultation.savedDiagnosesFromCurrentEncounter.forEach(function (diagnosis) {
-                if (diagnosis.isDirty) {
+                if (diagnosis.existingObs === null || diagnosis.existingObs === undefined || diagnosis.isDirty) {
                     diagnosis.diagnosisDateTime = null;
                     diagnosisList.push(diagnosis);
                 }
@@ -42,7 +42,8 @@ Bahmni.Clinical.EncounterTransactionMapper = function () {
         if (consultation.newlyAddedDiagnoses && consultation.newlyAddedDiagnoses.length > 0) {
             encounterData.bahmniDiagnoses = consultation.newlyAddedDiagnoses.map(function (diagnosis) {
                 return {
-                    codedAnswer: { uuid: !diagnosis.isNonCodedAnswer ? diagnosis.codedAnswer.uuid : undefined},
+                    codedAnswer: { uuid: !diagnosis.isNonCodedAnswer ? diagnosis.codedAnswer.uuid : undefined,
+                        name: diagnosis.getDisplayName()},
                     freeTextAnswer: diagnosis.isNonCodedAnswer ? diagnosis.codedAnswer.name : undefined,
                     order: diagnosis.order,
                     certainty: diagnosis.certainty,
@@ -85,9 +86,22 @@ Bahmni.Clinical.EncounterTransactionMapper = function () {
                 consultation.drugOrders.push(Bahmni.Clinical.DrugOrder.createFromUIObject(treatment));
             });
         }
+        var removableDrugsUuids = [];
         if (consultation.removableDrugs) {
-            consultation.drugOrders = consultation.drugOrders.concat(consultation.removableDrugs);
+            _.map(consultation.removableDrugs, function (treatmentDrug) {
+                if (treatmentDrug.previousOrderUuid) {
+                    consultation.drugOrders = consultation.drugOrders.concat(treatmentDrug);
+                }
+                removableDrugsUuids = removableDrugsUuids.concat(treatmentDrug.drug.uuid);
+            });
         }
+        // If previous order uuid of removableDrug is undefined, remove the same drug from, previous treatment drug
+        var previousTreatmentDrugs = consultation.treatmentDrugs || [];
+        previousTreatmentDrugs.forEach(function (treatment) {
+            if (removableDrugsUuids.indexOf(treatment.drug.uuid) === -1 && !_.find(consultation.drugOrders, { drug: {uuid: treatment.drug.uuid }})) {
+                consultation.drugOrders.push(Bahmni.Clinical.DrugOrder.createFromUIObject(treatment));
+            }
+        });
 
         encounterData.drugOrders = consultation.drugOrders;
 

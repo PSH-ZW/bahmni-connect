@@ -418,6 +418,17 @@ angular.module('bahmni.clinical').controller('ConsultationController',
                 }
                 return shouldAllow && !discontinuedDrugOrderValidationMessage && isObservationFormValid();
             };
+            
+            var onDeleteDiagnosisListener = $scope.$on("event:deleteDiagnosis", function (event, diagnosis) {
+                if (!diagnosis.existingObs && $scope.consultation.savedDiagnosesFromCurrentEncounter.length > 0) {
+                    for (var i = 0; i < $scope.consultation.savedDiagnosesFromCurrentEncounter.length; i++) {
+                        if ($scope.consultation.savedDiagnosesFromCurrentEncounter[i].$$hashKey === diagnosis.$$hashKey) {
+                            $scope.consultation.savedDiagnosesFromCurrentEncounter.splice(i, 1);
+                        }
+                    }
+                    $scope.save();
+                }
+            });
 
             $scope.save = function (toStateConfig) {
                 if (!isFormValid()) {
