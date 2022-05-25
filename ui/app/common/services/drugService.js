@@ -17,20 +17,15 @@ angular.module('bahmni.common.services')
                     return response.data.results;
                 });
             };
-            var searchDrugWithName = function (drugName, drugMasterList) {
+            var searchDrugWithName = function (drugName) {
                 var deferred = $q.defer();
                 var resultSet = [];
-                if (drugMasterList) {
-                    _.each(drugMasterList, function (item) {
-                        if (_.includes(item.name.toLowerCase(), drugName.toLowerCase())) {
-                            resultSet = resultSet.concat({
-                                name: item.displayName || item.name,
-                                uuid: item.uuid
-                            });
-                        }
+                offlineDbService.searchDrugWithName(drugName).then(function (results) {
+                    _.map(results, function (drug) {
+                        resultSet = resultSet.concat(drug.data);
                     });
-                }
-                deferred.resolve(resultSet);
+                    deferred.resolve(resultSet);
+                });
                 return deferred.promise;
             };
             var getDrugMetaData = function () {

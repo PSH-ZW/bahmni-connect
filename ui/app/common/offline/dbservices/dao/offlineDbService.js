@@ -4,15 +4,15 @@ angular.module('bahmni.common.offline')
     .service('offlineDbService', ['offlineService', '$http', '$q', 'patientDbService', 'patientAddressDbService', 'patientAttributeDbService',
         'patientIdentifierDbService', 'offlineMarkerDbService', 'offlineAddressHierarchyDbService', 'labOrderResultsDbService',
         'offlineConfigDbService', 'initializeOfflineSchema', 'referenceDataDbService', 'locationDbService', 'offlineSearchDbService',
-        'encounterDbService', 'visitDbService', 'observationDbService', 'conceptDbService', 'errorLogDbService', 'eventLogService', 'formDbService',
+        'encounterDbService', 'visitDbService', 'observationDbService', 'conceptDbService', 'errorLogDbService', 'eventLogService', 'formDbService', 'drugDbService',
         function (offlineService, $http, $q, patientDbService, patientAddressDbService, patientAttributeDbService, patientIdentifierDbService,
                   offlineMarkerDbService, offlineAddressHierarchyDbService, labOrderResultsDbService, offlineConfigDbService,
                   initializeOfflineSchema, referenceDataDbService, locationDbService, offlineSearchDbService, encounterDbService,
-                  visitDbService, observationDbService, conceptDbService, errorLogDbService, eventLogService, formDbService) {
+                  visitDbService, observationDbService, conceptDbService, errorLogDbService, eventLogService, formDbService, drugDbService) {
             var db, metaDataDb;
 
             var isMetaData = function (category) {
-                return category === 'offline-concepts' || category === 'forms';
+                return category === 'offline-concepts' || category === 'forms' || category === 'drug';
             };
 
             var createPatient = function (postRequest) {
@@ -146,6 +146,7 @@ angular.module('bahmni.common.offline')
                     conceptDbService.init(metaDataDb);
                     referenceDataDbService.init(metaDataDb);
                     formDbService.init(metaDataDb);
+                    drugDbService.init(metaDataDb);
                 } else {
                     db = offlineDb;
                     offlineAddressHierarchyDbService.init(offlineDb);
@@ -210,12 +211,24 @@ angular.module('bahmni.common.offline')
                 return conceptDbService.getReferenceData(conceptUuid);
             };
 
+            var getConceptByUuid = function (conceptUuid) {
+                return conceptDbService.getConcept(conceptUuid);
+            };
+
             var getConceptByName = function (conceptName) {
                 return conceptDbService.getConceptByName(conceptName);
             };
 
             var insertConceptAndUpdateHierarchy = function (data, parent) {
                 return conceptDbService.insertConceptAndUpdateHierarchy(data, parent);
+            };
+
+            var insertDrug = function (data) {
+                return drugDbService.insertDrug(data);
+            };
+
+            var searchDrugWithName = function (searchString) {
+                return drugDbService.searchDrugWithName(searchString);
             };
 
             var updateChildren = function (concept) {
@@ -360,7 +373,10 @@ angular.module('bahmni.common.offline')
                 getObservationsFor: getObservationsFor,
                 getVisitsByPatientUuid: getVisitsByPatientUuid,
                 insertConceptAndUpdateHierarchy: insertConceptAndUpdateHierarchy,
+                insertDrug: insertDrug,
+                searchDrugWithName: searchDrugWithName,
                 getConcept: getConcept,
+                getConceptByUuid: getConceptByUuid,
                 getConceptByName: getConceptByName,
                 updateChildren: updateChildren,
                 updateParentJson: updateParentJson,

@@ -368,6 +368,26 @@ angular.module('bahmni.clinical').controller('ConsultationController',
                 return discontinuedDrugOrderValidationMessage;
             };
 
+            var conflictingDiagnosisValidation = function (consulatation) {
+                var conflictingDiagnosisValidationMessage;
+                var addedDiagnoses = [];
+                consulatation.newlyAddedDiagnoses.map(function (drug) {
+                    if (addedDiagnoses.indexOf(drug.codedAnswer.uuid) !== -1) {
+                        conflictingDiagnosisValidationMessage = "Diagnosis " + drug.codedAnswer.name + " is already added."
+                    } else {
+                        addedDiagnoses = addedDiagnoses.concat(drug.codedAnswer.uuid);
+                    }
+                });
+                consulatation.savedDiagnosesFromCurrentEncounter.map(function (drug) {
+                    if (addedDiagnoses.indexOf(drug.codedAnswer.uuid) !== -1) {
+                        conflictingDiagnosisValidationMessage = "Diagnosis " + drug.codedAnswer.name + " is already added."
+                    } else {
+                        addedDiagnoses = addedDiagnoses.concat(drug.codedAnswer.uuid);
+                    }
+                });
+                return conflictingDiagnosisValidationMessage;
+            };
+
             var addFormObservations = function (tempConsultation, selectedFormTemplates) {
                 if (tempConsultation.observationForms) {
                     _.remove(tempConsultation.observations, function (observation) {
@@ -409,16 +429,21 @@ angular.module('bahmni.clinical').controller('ConsultationController',
                 var contxChange = contextChange();
                 var shouldAllow = contxChange["allow"];
                 var discontinuedDrugOrderValidationMessage = discontinuedDrugOrderValidation($scope.consultation.discontinuedDrugs);
+                var conflictingDiagnosisValidationMessage = conflictingDiagnosisValidation($scope.consultation);
                 if (!shouldAllow) {
                     var errorMessage = contxChange["errorMessage"] ? contxChange["errorMessage"] : "{{'CLINICAL_FORM_ERRORS_MESSAGE_KEY' | translate }}";
                     messagingService.showMessage('error', errorMessage);
                 } else if (discontinuedDrugOrderValidationMessage) {
                     var errorMessage = discontinuedDrugOrderValidationMessage;
                     messagingService.showMessage('error', errorMessage);
+                } else if (conflictingDiagnosisValidationMessage) {
+                    var errorMessage = conflictingDiagnosisValidationMessage;
+                    messagingService.showMessage('error', errorMessage);
                 }
-                return shouldAllow && !discontinuedDrugOrderValidationMessage && isObservationFormValid();
+
+                return shouldAllow && !discontinuedDrugOrderValidationMessage && isObservationFormValid() && !conflictingDiagnosisValidationMessage;
             };
-            
+
             var onDeleteDiagnosisListener = $scope.$on("event:deleteDiagnosis", function (event, diagnosis) {
                 if (!diagnosis.existingObs && $scope.consultation.savedDiagnosesFromCurrentEncounter.length > 0) {
                     for (var i = 0; i < $scope.consultation.savedDiagnosesFromCurrentEncounter.length; i++) {

@@ -201,6 +201,10 @@ angular.module('bahmni.common.offline')
                     var uuid = event.object.match(Bahmni.Common.Constants.uuidRegex)[0];
                     event.object = Bahmni.Common.Constants.offlineBahmniEncounterUrl + uuid + "?includeAll=true";
                 }
+                if (event.category === "drug") {
+                    var uuid = event.object.match(Bahmni.Common.Constants.uuidRegex)[0];
+                    event.object = Bahmni.Common.Constants.offlineDrugUrl + uuid + Bahmni.Common.Constants.DrugParams;
+                }
                 return eventLogService.getDataForUrl(Bahmni.Common.Constants.hostURL + event.object)
                     .then(function (response) {
                         return saveData(event, response)
@@ -281,7 +285,11 @@ angular.module('bahmni.common.offline')
                         deferrable.resolve();
                     });
                     break;
-
+                case 'drug':
+                    offlineDbService.insertDrug(response.data).then(function () {
+                        deferrable.resolve();
+                    });
+                    break;
                 case 'offline-concepts':
                     offlineDbService.insertConceptAndUpdateHierarchy({"results": [response.data]}).then(function () {
                         deferrable.resolve();

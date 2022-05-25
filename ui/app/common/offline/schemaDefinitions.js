@@ -403,7 +403,25 @@ Bahmni.Common.Offline.MetaDataSchemaDefinitions = {
         nullableColumns: [],
         primaryKeyColumns: ['uuid']
     },
-
+    Drug: {
+        tableName: 'drug',
+        columns: [
+            {
+                name: 'data',
+                type: 'OBJECT'
+            },
+            {
+                name: 'uuid',
+                type: 'STRING'
+            },
+            {
+                name: 'name',
+                type: 'STRING'
+            }
+        ],
+        nullableColumns: [],
+        primaryKeyColumns: ['uuid']
+    },
     Configs: {
         tableName: 'configs',
         columns: [

@@ -338,6 +338,11 @@ angular.module('bahmni.common.offline')
                 return $q.when(forms);
             };
 
+            var insertDrug = function (data) {
+                var drug = AndroidFormDbService.insertDrug(JSON.stringify(data));
+                return $q.when({});
+            };
+
             return {
                 init: init,
                 initSchema: initSchema,
@@ -382,7 +387,8 @@ angular.module('bahmni.common.offline')
                 deleteObsByEncounterUuid: deleteObsByEncounterUuid,
                 insertForm: insertForm,
                 getFormByUuid: getFormByUuid,
-                getAllForms: getAllForms
+                getAllForms: getAllForms,
+                insertDrug: insertDrug
             };
         }
     ]);

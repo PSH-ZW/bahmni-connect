@@ -15,7 +15,6 @@ angular.module('bahmni.clinical')
             $scope.addTreatment = true;
             $scope.canOrderSetBeAdded = true;
             $scope.isSearchDisabled = false;
-            $scope.drugMetaData = [];
 
             $scope.getFilteredOrderSets = function (searchTerm) {
                 if (searchTerm && searchTerm.length >= 3) {
@@ -42,7 +41,7 @@ angular.module('bahmni.clinical')
             }
             if (treatmentConfig.isAutoCompleteForAllConcepts()) {
                 $scope.getDrugs = function (request) {
-                    return drugService.searchDrugWithName(request.term, $scope.drugMetaData);
+                    return drugService.searchDrugWithName(request.term);
                 };
             }
             if (treatmentConfig.isAutoCompleteForGivenConceptSet()) {
@@ -753,12 +752,6 @@ angular.module('bahmni.clinical')
                 mergeActiveAndScheduledWithDiscontinuedOrders();
 
                 $scope.treatmentConfig = treatmentConfig;// $scope.treatmentConfig used only in UI
-                
-                drugService.getDrugMetaData().then(function (result) {
-                    if (result.answers) {
-                        $scope.drugMetaData = result.answers;
-                    }
-                });
             };
             init();
         }]);

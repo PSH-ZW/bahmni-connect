@@ -12,10 +12,7 @@ Bahmni.Clinical.EncounterTransactionMapper = function () {
         }
         if (consultation.savedDiagnosesFromCurrentEncounter) {
             consultation.savedDiagnosesFromCurrentEncounter.forEach(function (diagnosis) {
-                if (diagnosis.existingObs === null || diagnosis.existingObs === undefined || diagnosis.isDirty) {
-                    diagnosis.diagnosisDateTime = null;
-                    diagnosisList.push(diagnosis);
-                }
+                diagnosisList.push(diagnosis);
             });
         }
     };

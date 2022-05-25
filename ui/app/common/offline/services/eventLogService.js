@@ -39,6 +39,8 @@ angular.module('bahmni.common.offline')
                 return getEvents(Bahmni.Common.Constants.addressEventLogServiceUrl, marker);
             case 'forms':
                 return getEvents(Bahmni.Common.Constants.eventLogServiceFormUrl, marker);
+            case 'drug':
+                return getEvents(Bahmni.Common.Constants.eventLogDrugUrl, marker);
             default:
                 return $q.when({});
             }

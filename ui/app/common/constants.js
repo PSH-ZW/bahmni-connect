@@ -250,6 +250,7 @@ Bahmni.Common = Bahmni.Common || {};
         preprocessedPatientFilesUrl: RESTWS_V1 + "/bahmniconnect/patientfiles?filter=",
         eventLogServiceConceptUrl: hostUrl + "/event-log-service/rest/eventlog/concepts",
         eventLogServiceFormUrl: hostUrl + "/event-log-service/rest/eventlog/forms",
+        eventLogDrugUrl: hostUrl + "/event-log-service/rest/eventlog/drug",
         offlineMetadataUrl: hostUrl + "/offlineMetadata.json",
         faviconUrl: hostUrl + "/bahmni/favicon.ico",
         platformType: {
@@ -276,10 +277,12 @@ Bahmni.Common = Bahmni.Common || {};
         syncStatusMessages: syncStatusMessages,
         uuidRegex: "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
         offlineBahmniEncounterUrl: "/openmrs/ws/rest/v1/bahmnicore/bahmniencounter/",
+        offlineDrugUrl: "/openmrs/ws/rest/v1/drug/",
         eventlogFilterUrl: hostUrl + "/openmrs/ws/rest/v1/eventlog/filter",
         bahmniConnectMetaDataDb: "metaData",
         bahmniConnectVersion: "0.89",
-        defaultBahmniConnectDb: "Bahmni"
+        defaultBahmniConnectDb: "Bahmni",
+        DrugParams: "?v=custom:(uuid,strength,name,dosageForm,concept:(uuid,name,names:(name)))"
     };
 })();
 

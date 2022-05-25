@@ -51,6 +51,12 @@ angular.module('bahmni.clinical')
                 });
             };
 
+            var canDeleteDiagnosis = function (diagnosis) {
+                return findPrivilege(Bahmni.Common.Constants.deleteDiagnosisPrivilege) &&
+                    (diagnosis.existingObs === undefined || diagnosis.existingObs === null) &&
+                    (diagnosis.previousObs === undefined || diagnosis.previousObs === null);
+            };
+
             var init = function () {
                 $scope.canDeleteDiagnosis = findPrivilege(Bahmni.Common.Constants.deleteDiagnosisPrivilege);
                 $scope.allowOnlyCodedDiagnosis = appService.getAppDescriptor().getConfig("allowOnlyCodedDiagnosis") &&
