@@ -37,25 +37,24 @@ angular.module('bahmni.registration')
             var defer = $q.defer();
             var patientSearchUrl = Bahmni.Common.Constants.bahmniSearchUrl + "/patient";
             var onResults = function (result) {
-                defer.resolve(result);
+                var promises = [];
+                _.each(result.pageOfResults, function (data) {
+                    promises.push(
+                        get(data.uuid).then(function (fromDb) {
+                            if (fromDb && fromDb.patient) {
+                                data.downloaded = true;
+                            }
+                        })
+                    );
+                });
+                $q.all(promises).finally(function () {
+                    defer.resolve(result);
+                });
             };
             $http.get(patientSearchUrl, config).success(onResults)
                 .error(function (error) {
                     defer.reject(error);
                 });
-            return defer.promise;
-        };
-
-        this.getEncountersByPatientUuid = function (patientUuid) {
-            var defer = $q.defer();
-            $http.get(Bahmni.Common.Constants.encounterUrl, {
-                params: { patient: patientUuid },
-                withCredentials: true
-            }).success(function (result) {
-                defer.resolve(result);
-            }).error(function (error) {
-                defer.reject(error);
-            });
             return defer.promise;
         };
 

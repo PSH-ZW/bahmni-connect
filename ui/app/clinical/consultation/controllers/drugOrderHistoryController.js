@@ -36,18 +36,18 @@ angular.module('bahmni.clinical')
 
             $scope.onSelectDrugGroup = function (selected) {
                 console.log('asdkfjahfljf', selected.length, $scope.selectedDrugGroup);
-                $scope.consultation.drugOrderGroups.forEach(function(value, key) {
+                $scope.consultation.drugOrderGroups.forEach(function (value, key) {
                     console.log('akskskskksk', value);
-                    if("selected" in value){
+                    if ("selected" in value) {
                         delete value.selected;
                     }
                     console.log('akskskskksk2', value.selected);
                     const item = $scope.selectedDrugGroup.trim();
-                    if( value.label === item){
+                    if (value.label === item) {
                         value.selected = true;
                         console.log('akskskskksk3', value.selected);
                     }
-                })
+                });
             };
 
             var getPreviousVisitDrugOrders = function () {
@@ -156,12 +156,12 @@ angular.module('bahmni.clinical')
             $scope.refillAll = function () {
                 console.log('sdjhbmckdjvbsdfjk1', $scope.selectedDrugGroup, $scope.consultation.drugOrderGroups);
                 const item = $scope.selectedDrugGroup.trim();
-                $scope.consultation.drugOrderGroups.forEach(function(value, key) {
-                   if( value.label === item ){
-                       console.log('kdsbhcdkvhdf', value.label, value.drugOrders);
-                       $rootScope.$broadcast("event:refillDrugOrders", value.drugOrders);
-                   }
-                })
+                $scope.consultation.drugOrderGroups.forEach(function (value, key) {
+                    if (value.label === item) {
+                        console.log('kdsbhcdkvhdf', value.label, value.drugOrders);
+                        $rootScope.$broadcast("event:refillDrugOrders", value.drugOrders);
+                    }
+                });
             };
 
             $scope.revise = function (drugOrder, drugOrders) {

@@ -2,8 +2,8 @@
 
 angular.module('bahmni.registration')
     .controller('SearchPatientController', ['$rootScope', '$scope', '$location', '$window', 'spinner', 'patientService', 'appService',
-        'messagingService', '$translate', '$filter', 'offlineSyncService', 'encounterService',
-        function ($rootScope, $scope, $location, $window, spinner, patientService, appService, messagingService, $translate, $filter, offlineSyncService, encounterService) {
+        'messagingService', '$translate', '$filter', 'offlineSyncService', 'ngDialog',
+        function ($rootScope, $scope, $location, $window, spinner, patientService, appService, messagingService, $translate, $filter, offlineSyncService, ngDialog) {
             $scope.results = [];
             $scope.extraIdentifierTypes = _.filter($rootScope.patientConfiguration.identifierTypes, function (identifierType) {
                 return !identifierType.primary;
@@ -25,13 +25,51 @@ angular.module('bahmni.registration')
                 return columnName;
             };
 
-            $scope.downloadPatient = function (patient) {
-                patientService.getPatientFromRemote(patient.uuid).then(function (response) {
-                    offlineSyncService.saveData({category: 'patient'}, { data: response }).then(function () {
-                       // encounterService.findByPatientUuid(patient.uuid).then(function (result) {
-                       //    console.log('result', result);
-                       // });
-                    });
+            $scope.onToggleRemoteSearch = function (remoteSearch) {
+                $scope.results = [];
+            };
+
+            $scope.onClickDownload = function (patient, index) {
+                var pat = $scope.results[index];
+                patientService.get(patient.uuid).then(function (response) {
+                    if (response && response.patient) {
+                        ngDialog.open({
+                            template: 'views/patientSync/patientDownload.html',
+                            scope: $scope,
+                            data: {
+                                patientUuid: patient.uuid,
+                                message: "Patient is already present in the system, sync patient data to server",
+                                onClickButton: $scope.syncPatient,
+                                buttonLabel: "sync"
+                            }
+                        });
+                    } else {
+                       // todo if visit download fails it still return success
+                        spinner.forPromise(
+                           offlineSyncService.downloadAndSavePatient(patient.uuid)
+                               .then(function (success) {
+                                   console.log('success', success, index);
+                                   pat.downloaded = true;
+                                   pat.failed = false;
+                               })
+                               .catch(function (error) {
+                                   console.log('error', error);
+                                   pat.downloaded = false;
+                                   pat.failed = true;
+                                   ngDialog.open({
+                                       template: 'views/patientSync/patientDownload.html',
+                                       scope: $scope,
+                                       data: {
+                                           patient: patient,
+                                           patientIndex: index,
+                                           message: "Failed to download patient, click to sync again",
+                                           onClickButton: $scope.onClickDownload,
+                                           buttonLabel: "sync again"
+                                       }
+                                   });
+                               })
+                       );
+                    }
                 });
             };
 

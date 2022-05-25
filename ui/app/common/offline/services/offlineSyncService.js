@@ -35,6 +35,52 @@ angular.module('bahmni.common.offline')
                 return $q.when();
             };
 
+            var downloadAndSavePatient = function (patientUuid) {
+                var url = Bahmni.Registration.Constants.openmrsUrl + "/ws/rest/v1/patient/" + patientUuid;
+                var config = {
+                    method: "GET",
+                    params: {v: "full"},
+                    withCredentials: true
+                };
+                var defer = $q.defer();
+                $http.get(url, config).success(function (patient) {
+                    // get encounters for patient and save
+                    console.log('downloading patient', patient);
+                    $http.get(Bahmni.Common.Constants.encounterUrl, {
+                        params: { patient: patientUuid },
+                        withCredentials: true
+                    }).success(function (response) {
+                        console.log('downloading encounter', response);
+                        var promises = [];
+                        var encounters = response.results || [];
+                        _.map(encounters, function (encounter) {
+                            promises.push(
+                                $http.get(Bahmni.Common.Constants.bahmniEncounterUrl + "/" + encounter.uuid, {
+                                    params: { includeAll: true },
+                                    withCredentials: true
+                                }).success(function (encounterData) {
+                                    console.log('downloading encounter data ', encounterData);
+                                    saveData({ category: 'Encounter' }, { data: encounterData });
+                                }).error(function (error) {
+                                    // do something
+                                    defer.reject(error);
+                                })
+                            );
+                        });
+                        $q.all(promises).finally(function () {
+                            saveData({ category: 'patient' }, { data: patient });
+                            defer.resolve('download success');
+                        });
+                    }).error(function (error) {
+                        // do something
+                        defer.reject(error);
+                    });
+                }).error(function (error) {
+                    defer.reject(error);
+                });
+                return defer.promise;
+            };
+
             var updateSyncedFileNames = function (fileName, dbName) {
                 var syncedInfo = offlineService.getItem("synced") || {};
                 syncedInfo[dbName] = syncedInfo[dbName] || [];

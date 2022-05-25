@@ -16,6 +16,9 @@ angular.module('bahmni.registration')
 
             var get = function (uuid) {
                 return offlinePatientServiceStrategy.get(uuid).then(function (data) {
+                    if (!data) {
+                        return data;
+                    }
                     var patientData = JSON.parse(JSON.stringify(data));
                     patientData.patient.person.preferredName = patientData.patient.person.names[0];
                     patientData.patient.person.preferredAddress = patientData.patient.person.addresses[0];

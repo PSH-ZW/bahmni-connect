@@ -40,7 +40,7 @@
 
                 <article class="fl">
                     <label for="name"><strong>Remote Search</strong></label>
-                    <input style="margin-top: 10px;" tabindex="4" type="checkbox" id="remoteSearch" ng-model="searchParameters.remoteSearch"/>
+                    <input style="margin-top: 10px;" tabindex="4" type="checkbox" id="remoteSearch" ng-model="searchParameters.remoteSearch" ng-change="onToggleRemoteSearch(searchParameters.remoteSearch)"/>
                 </article>
                 <article class="fl">
                     <div class="reg-srch-btn">
@@ -64,6 +64,7 @@
         <table class="table">
             <thead>
             <tr>
+                <th ng-if="searchParameters.remoteSearch"></th>
                 <th><strong>{{ ::'REGISTRATION_LABEL_ID' | translate}}</strong></th>
                 <th ng-repeat = "type in ::extraIdentifierTypes track by $index"><strong>{{type.name}}</strong></th>
                 <th><strong>{{ ::'REGISTRATION_LABEL_NAME' | translate}}</strong></th>
@@ -73,11 +74,15 @@
                 <th ng-repeat = "field in ::addressSearchResultsConfig.fields"><strong>{{::convertToTableHeader(getAddressColumnName(field))}}</strong></th>
                 <th><strong>{{ ::'REGISTRATION_LABEL_REGISTRATION_DATE' | translate}}</strong></th>
                 <th ng-if="::programAttributesSearchConfig.show"><strong>{{::convertToTableHeader(programAttributesSearchConfig.label)}}</strong></th>
-                <th></th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="result in results">
+                <td ng-if="searchParameters.remoteSearch">
+                    <i ng-if="!result.downloaded && !result.failed" ng-click="onClickDownload(result, $index)" class="fa fa-download"></i>
+                    <!--<i ng-if="result.downloaded && !result.failed" ng-click="onClickDownload(result, $index)" class="fa fa-sync"></i>-->
+                    <i ng-if="result.failed" ng-click="onClickDownload(result, $index)" class="fa fa-exclamation-triangle"></i>
+                </td>
                 <td>
                     <a tabindex="{{ :: 7 + $index + 1 }}" ng-if="::(searchActions.length > 0)" ng-click="forPatient(result).doExtensionAction(searchActions[0])">
                         {{::result.identifier || 'Not Assigned'}}
@@ -94,7 +99,6 @@
                 <td ng-repeat = "field in ::addressSearchResultsConfig.fields">{{::result.addressFieldValue[field] || ""}}</td>
                 <td>{{::result.dateCreated | bahmniDate}}</td>
                 <td ng-if="::programAttributesSearchConfig.show">{{getProgramAttributeValues(result) | bahmniDateInStrictMode}}</td>
-                <td><button ng-click="downloadPatient(result)">Download</button></td>
             </tr>
             </tbody>
         </table>

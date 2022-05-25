@@ -1,0 +1,18 @@
+<div class="revise-refill-modal-wrapper" aria-labelledby="dialog-label">
+	<span class="ngdialog-start"></span>
+
+	<span class="ngdialog-close"></span>
+
+	<div>
+		{{ngDialogData.message}}
+	</div>
+	<div class="dialog-button-group">
+		<button id="modal-revise-button" class="secondary-button" ng-click="ngDialogData.onClickButton(ngDialogData.patient, ngDialogData.patientIndex)"
+				focus-on="popupActive" ng-focus="toggleTabIndexWithinModal($event)">
+			{{ngDialogData.buttonLabel}}
+		</button>
+	</div>
+	<span class="ngdialog-end"></span>
+</div>
+
+
