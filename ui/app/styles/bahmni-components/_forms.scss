@@ -317,6 +317,9 @@ form, .form {
       height: 36px;
       min-width: 210px;
     }
+    @media (max-width : 470px){
+      width: 12.5em;
+    }
     float: left;
   }
 

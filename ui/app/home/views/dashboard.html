@@ -2,7 +2,7 @@
     <header class="reg-header">
         <div class="reg-header-right fr">
             <form class="change-location fl" ng-class="{'change-location-offline': isOfflineApp}">
-                <select  ng-model="selectedLocationUuid" ng-change="onLocationChange()">
+                <select  class="change-loaction-header-select" ng-model="selectedLocationUuid" ng-change="onLocationChange()">
                     <option ng-repeat="location in locations | orderBy:'display'" ng-selected="isCurrentLocation(location)" value="{{location.uuid}}">
                         {{location.display}}
                     </option>
@@ -15,7 +15,7 @@
                 <button class="btn" ng-if="isUpdateAvailable()" ng-click="update()">Update</button>
             </div>
 
-            <button class="btn offline-sync fl" ng-click="sync()" ng-show="isOfflineApp && !isSyncing ">
+            <button class="btn offline-sync fl offline-sync-header-button" ng-click="sync()" ng-show="isOfflineApp && !isSyncing ">
                 {{::'HEADER_LABEL_SYNC_KEY' | translate}}
             </button>
             <button class="btn offline-sync fl offline-sync-image" ng-show="isOfflineApp && isSyncing" disabled>
@@ -53,7 +53,7 @@
         </div>
     </header>
     <div class="apps">
-        <ul>
+        <ul class="dashboard-content-align-center">
             <li ng-repeat="extn in appExtensions">
                 <a id="{{extn.id}}" ng-href="{{extn.url}}" class="button app big" target="{{extn.target?extn.target:'_self'}}" ng-if="isVisibleExtension(extn)"><i class="{{extn.icon}}"></i>{{extn | titleTranslate}}</a>
             </li>

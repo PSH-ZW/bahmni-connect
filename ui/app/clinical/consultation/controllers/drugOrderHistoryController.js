@@ -10,13 +10,44 @@ angular.module('bahmni.clinical')
             var currentVisit = visitHistory.activeVisit;
             var activeDrugOrdersList = [];
             var prescribedDrugOrders = [];
+            $scope.selectedDrugGroup = {};
             $scope.dispensePrivilege = Bahmni.Clinical.Constants.dispensePrivilege;
             $scope.scheduledDate = DateUtil.getDateWithoutTime(DateUtil.addDays(DateUtil.now(), 1));
+
+            var someFunc = function () {
+                console.log('x,jbckhdb vjmcb kmj,mcn cx', $scope.consultation.drugOrderGroups);
+                // $scope.selectedDrugGroup = $scope.consultation.drugOrderGroups;
+                console.log('x,jbckhdb vjmcb kmj,mcn cx11', $scope.consultation.drugOrderGroups, $scope.selectedDrugGroup);
+                $scope.consultation.drugOrderGroups.forEach(function (value, key) {
+                    if (value.selected) {
+                        console.log('akskskskkskmafjafhjdak', value);
+                        $scope.selectedDrugGroup = value;
+                    }
+                });
+            };
 
             var createPrescriptionGroups = function (activeAndScheduledDrugOrders) {
                 $scope.consultation.drugOrderGroups = [];
                 createPrescribedDrugOrderGroups();
                 createRecentDrugOrderGroup(activeAndScheduledDrugOrders);
+                someFunc();
+                console.log('12222akskskskkskmafjafhjdak selected', $scope.selectedDrugGroup);
+            };
+
+            $scope.onSelectDrugGroup = function (selected) {
+                console.log('asdkfjahfljf', selected.length, $scope.selectedDrugGroup);
+                $scope.consultation.drugOrderGroups.forEach(function(value, key) {
+                    console.log('akskskskksk', value);
+                    if("selected" in value){
+                        delete value.selected;
+                    }
+                    console.log('akskskskksk2', value.selected);
+                    const item = $scope.selectedDrugGroup.trim();
+                    if( value.label === item){
+                        value.selected = true;
+                        console.log('akskskskksk3', value.selected);
+                    }
+                })
             };
 
             var getPreviousVisitDrugOrders = function () {
@@ -118,7 +149,19 @@ angular.module('bahmni.clinical')
             };
 
             $scope.refillAll = function (drugOrders) {
+                console.log('sdjhbmckdjvbsdfjk', $scope.consultation.drugOrderGroups, drugOrders);
                 $rootScope.$broadcast("event:refillDrugOrders", drugOrders);
+            };
+
+            $scope.refillAll = function () {
+                console.log('sdjhbmckdjvbsdfjk1', $scope.selectedDrugGroup, $scope.consultation.drugOrderGroups);
+                const item = $scope.selectedDrugGroup.trim();
+                $scope.consultation.drugOrderGroups.forEach(function(value, key) {
+                   if( value.label === item ){
+                       console.log('kdsbhcdkvhdf', value.label, value.drugOrders);
+                       $rootScope.$broadcast("event:refillDrugOrders", value.drugOrders);
+                   }
+                })
             };
 
             $scope.revise = function (drugOrder, drugOrders) {
@@ -187,7 +230,7 @@ angular.module('bahmni.clinical')
 
             $scope.updateAllOrderAttributesByName = function (orderAttribute, drugOrderGroup) {
                 drugOrderGroup[orderAttribute.name] = drugOrderGroup[orderAttribute.name] || {};
-                drugOrderGroup[orderAttribute.name].selected = drugOrderGroup[orderAttribute.name].selected ? false : true;
+                drugOrderGroup[orderAttribute.name].selected = !drugOrderGroup[orderAttribute.name].selected;
 
                 drugOrderGroup.drugOrders.forEach(function (drugOrder) {
                     var selectedOrderAttribute = getAttribute(drugOrder, orderAttribute.name);

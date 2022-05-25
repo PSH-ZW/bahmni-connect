@@ -57,6 +57,9 @@
         @include column(3);
         input[type="text"] {
             min-width: 160px;
+            @media screen and (max-width: 470px) {
+              width:80%;
+            }
             margin-left: 10px;
             margin-top: 0;
             float: left;
@@ -187,7 +190,13 @@
   border-bottom: 0;
 }
 
-
+@media screen and (max-width: 470px) {
+  .accept-button{
+     width: 50% !important;
+     margin: 0.5rem;
+     min-width: 2.2rem !important;
+  }
+}
 
 @media screen and (max-width: 930px) {
   .diagnosis .status button {
@@ -210,6 +219,14 @@
     .col5{
       width:9%;
     }
+    @media screen and (max-width: 470px) {
+      .col1{
+        width:75%;
+      }
+      .col5{
+        width:20%;
+      }
+  }
     button {
       width: 78px;
     }
@@ -218,12 +235,12 @@
     }
     button:first-child {
       margin-left: 10px;
-      border-right: 1px;
+      border-right: 1;
       border-radius: 3px 3px 0 0;
     }
     button:last-child {
       border-radius: 0 0 3px 3px;
-      border-left: 1px;
+      border-left: 1;
       margin-left: 10px;
     }
     .view-past .message {

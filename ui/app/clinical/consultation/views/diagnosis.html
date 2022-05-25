@@ -5,8 +5,8 @@
                 <div class="table new-diagnosis primary-section-grid">
                     <div class="row table-header">
                         <div class="col col1"><span>Diagnosis</span></div>
-                        <div class="col col2"><span>Order</span></div>
-                        <div class="col col3"><span>Certainty</span></div>
+                        <div class="col col2 xs-hide"><span>Order</span></div>
+                        <div class="col col3 xs-hide"><span>Certainty</span></div>
                         <div class="col col4" ng-show="isStatusConfigured()"><span>Status</span></div>
                     </div>
 
@@ -25,7 +25,7 @@
 
                                 <span ng-if="!allowOnlyCodedDiagnosis">
                                     <button type="button" ng-model="diagnosis.isNonCodedAnswer"
-                                            class="small-btn accept-btn" id="accept-button-{{$index}}"
+                                            class="small-btn accept-btn accept-button" id="accept-button-{{$index}}"
                                             ng-click="diagnosis.setAsNonCodedAnswer() && restEmptyRowsToOne($index)"
                                             ng-class="{
                                                 illegalValue: diagnosis.codedAnswer.name && !diagnosis.codedAnswer.uuid && !diagnosis.isNonCodedAnswer,
@@ -35,12 +35,12 @@
                                 </span>
 
                             </div>
-                            <div class="col col2">
+                            <div class="col col2  xs-hide">
                                 <buttons-radio class="btn-group" model='diagnosis.order' id="order-{{$index}}"
                                                ng-class="{'illegalValue': !diagnosis.isValidOrder()}"
                                                options='orderOptions'/>
                             </div>
-                            <div class="col col3">
+                            <div class="col col3 xs-hide">
                                 <buttons-radio class="small-btn" model='diagnosis.certainty' id="certainty-{{$index}}"
                                                ng-class="{'illegalValue': !diagnosis.isValidCertainty()}"
                                                options='certaintyOptions'/>
@@ -51,7 +51,7 @@
                                                options='diagnosisStatus'/>
                             </div>
                             <div class="col col5">
-                                <button type="button" class="small-btn row-remover" ng-click="removeObservation($index); checkInvalidDiagnoses()"
+                                <button type="button" class="small-btn row-remover accept-button" ng-click="removeObservation($index); checkInvalidDiagnoses()"
                                         ng-show="diagnosis.codedAnswer.name">
                                     <span class="fa fa-remove"></span>
                                 </button>
