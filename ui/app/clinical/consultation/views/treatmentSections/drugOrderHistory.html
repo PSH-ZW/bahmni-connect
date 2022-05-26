@@ -3,26 +3,14 @@
         <p class="placeholder-text">No prescriptions saved yet</p>
     </div>
 	<div class="inpage">
-        <div class="sm-hide">
-            <!--<select ng-model="selectedDrugGroup" class="consultation-select" ng-change="onSelectDrugGroup(selectedDrugGroup)">
-                <option ng-repeat="drugOrderGroup in consultation.drugOrderGroups">
-                    <span>{{drugOrderGroup.label | bahmniDate}}</span>
-                    <i class="fa fa-star current-visit-icon" title="Current visit" ng-if="drugOrderGroup.isCurrentVisit"></i>
-                </option>
-            </select>-->
-            <select name="mySelect" id="mySelect" class="consultation-select" ng-change="onSelectDrugGroup(selectedDrugGroup)"
-                    ng-options="option.label for option in consultation.drugOrderGroups "
-                    ng-model="selectedDrugGroup"></select>
-            <button class="secondary-button drugs-refill-button fr" ng-click="refillAll()" ng-if="!drugOrderGroupsEmpty()">Refill All</button>
-        </div>
 		<div class="tabs">
 			<div class="tab" ng-repeat="drugOrderGroup in consultation.drugOrderGroups">
 				<input class="tab-radio" id="{{'drug-orders-tab-' + $index}}" name="tab-group-1" type="radio" ng-checked="drugOrderGroup.selected" ng-class="{}" tabindex="-1">
-				<label class="tab-label xs-hide" for="{{'drug-orders-tab-' + $index}}">
+				<label class="tab-label" for="{{'drug-orders-tab-' + $index}}">
                     <span>{{drugOrderGroup.label | bahmniDate}}</span>
                     <i class="fa fa-star current-visit-icon" title="Current visit" ng-if="drugOrderGroup.isCurrentVisit"></i>
                 </label>
-                <button class="secondary-button refill-drugs-btn fr xs-hide" ng-click="refillAll(drugOrderGroup.drugOrders)" ng-if="!drugOrderGroupsEmpty()">Refill All</button>
+                <button class="secondary-button refill-drugs-btn fr" ng-click="refillAll(drugOrderGroup.drugOrders)" ng-if="!drugOrderGroupsEmpty()">Refill All</button>
                 <!-- <button  ng-repeat="orderAttribute in getOrderAttributes()" class="secondary-button dispense-all-btn fr" show-if-privilege="{{dispensePrivilege}}" ng-if="!drugOrderGroupsEmpty()"  ng-click="updateAllOrderAttributesByName(orderAttribute,drugOrderGroup)" ng-disabled="!canUpdateAtLeastOneOrderAttributeOfName(drugOrderGroup,orderAttribute.name)">
                     <i  ng-init="allOrderAttributesOfNameSet(drugOrderGroup,orderAttribute.name)" class="fa fa-check" ng-show="drugOrderGroup[orderAttribute.name].selected" ></i>
                     {{orderAttribute.name}} All
@@ -32,36 +20,34 @@
                         <p ng-if="!drugOrderGroup.drugOrders.length" class="placeholder-text">No Recent Treatments</p>
                         <ul class="table-mimic">
 							<li id="ordered-drug-orders" ng-repeat="drugOrder in drugOrderGroup.drugOrders" ng-class="{'active-drug' : drugOrder.isActive(), 'highlight' : drugOrder.isBeingEdited, 'scheduled-drug': drugOrder.isScheduled()}">
-                                <div>
-                                    <div class="drug-details" ng-class="{'strike-through': drugOrder.isDiscontinuedOrStopped()}">
-                                        <strong class="drug-name">{{drugOrder.getDisplayName()}}</strong>
-                                        {{drugOrder.getDescriptionWithQuantity()}}
-                                    </div>
-                                    <div class="button-group-wrapper">
-                                        <div class="button-group">
-                                            <!--<button ng-repeat="orderAttribute in drugOrder.orderAttributes" show-if-privilege="{{dispensePrivilege}}"
-                                                    class="dispense-btn" ng-disabled="shouldBeDisabled(drugOrder,orderAttribute)"
-                                                    ng-click="updateOrderAttribute(drugOrder,orderAttribute)">
-                                                <i class="fa fa-check" ng-show="orderAttribute.value"></i>
-                                                {{orderAttribute.name.substring(0,1)}}
-                                            </button>-->
-                                            <button class="drug-orders-history-button-group" ng-disabled="!drugOrder.isActive() || !drugOrder.isEditAllowed" ng-click="revise(drugOrder, drugOrderGroup.drugOrders)">
-                                                <i class="fa fa-edit"></i>
-                                            </button>
-                                            <button class="undo-btn drug-orders-history-button-group" ng-if="drugOrder.isMarkedForDiscontinue" ng-disabled="!drugOrder.isActive() || !drugOrder.isDiscontinuedAllowed" ng-click="undoDiscontinue(drugOrder)">
-                                                <i class="fa fa-undo"></i>
-                                            </button>
-                                            <button class="stop-drug-btn drug-orders-history-button-group" ng-if="!drugOrder.isMarkedForDiscontinue" ng-disabled="!drugOrder.isActive() || !drugOrder.isDiscontinuedAllowed" ng-click="discontinue(drugOrder)">
-                                                Stop
-                                            </button>
-                                            <button class="refill-btn drug-orders-history-button-group" ng-disabled="!drugOrder.effectiveStopDate || drugOrder.isDrugRetired" ng-click="refill(drugOrder)">
-                                                Refill
-                                            </button>
-                                            <button class="toggle drug-orders-history-button-group" ng-class="{'has-notes': drugOrder.additionalInstructions}" toggle="drugOrder.showAdditionalInstructions">
-                                                <i class="fa fa-plus-circle"></i>
-                                                <i class="fa fa-minus-circle"></i>
-                                            </button>
-                                        </div>
+                                <div class="drug-details" ng-class="{'strike-through': drugOrder.isDiscontinuedOrStopped()}">
+                                    <strong class="drug-name">{{drugOrder.getDisplayName()}}</strong>
+                                    {{drugOrder.getDescriptionWithQuantity()}}
+                                </div>
+								<div class="button-group-wrapper">
+                                    <div class="button-group">
+                                        <!-- <button ng-repeat="orderAttribute in drugOrder.orderAttributes" show-if-privilege="{{dispensePrivilege}}"
+                                                class="dispense-btn" ng-disabled="shouldBeDisabled(drugOrder,orderAttribute)"
+                                                ng-click="updateOrderAttribute(drugOrder,orderAttribute)">
+                                            <i class="fa fa-check" ng-show="orderAttribute.value"></i>
+                                            {{orderAttribute.name.substring(0,1)}}
+                                        </button> -->
+                                        <button ng-disabled="!drugOrder.isActive() || !drugOrder.isEditAllowed" ng-click="revise(drugOrder, drugOrderGroup.drugOrders)">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                                        <button class="undo-btn" ng-if="drugOrder.isMarkedForDiscontinue" ng-disabled="!drugOrder.isActive() || !drugOrder.isDiscontinuedAllowed" ng-click="undoDiscontinue(drugOrder)">
+                                            <i class="fa fa-undo"></i>
+                                        </button>
+                                        <button class="stop-drug-btn" ng-if="!drugOrder.isMarkedForDiscontinue" ng-disabled="!drugOrder.isActive() || !drugOrder.isDiscontinuedAllowed" ng-click="discontinue(drugOrder)">
+                                            Stop
+                                        </button>
+                                        <button class="refill-btn" ng-disabled="!drugOrder.effectiveStopDate || drugOrder.isDrugRetired" ng-click="refill(drugOrder)">
+                                            Refill
+                                        </button>
+                                        <button class="toggle" ng-class="{'has-notes': drugOrder.additionalInstructions}" toggle="drugOrder.showAdditionalInstructions">
+                                            <i class="fa fa-plus-circle"></i>
+                                            <i class="fa fa-minus-circle"></i>
+                                        </button>
                                     </div>
 								</div>
                                 <div class="start-date fr">

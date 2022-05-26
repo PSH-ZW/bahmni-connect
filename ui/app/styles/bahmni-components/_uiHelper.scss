@@ -40,12 +40,6 @@ use either a `<div>` or an `<section>` element:
   }
 }
 
-.display-flex{
-	@media screen and (max-width: 470px) {
-		display: flex;
-        padding: 0 0.4rem 0.4rem 0;
-	}
-}
 
 h2.section-title {
 	font-family: $OpenSansFont;

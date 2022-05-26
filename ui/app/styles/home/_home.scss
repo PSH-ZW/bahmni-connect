@@ -136,11 +136,6 @@ p.caution {
 .button, button, input[type="submit"], input[type="button"], input[type="submit"], a.button{
   padding: 7px 20px;
 }
-.offline-sync-button {
-  @media screen and (max-width: 470px) {
-    padding: 7px 10px;
-  }
-}
 button[disabled], button[disabled]:hover, button.disabled, button.disabled:hover{
     opacity: .65;
     filter: alpha(opacity=65);

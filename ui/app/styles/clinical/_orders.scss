@@ -142,12 +142,6 @@
     }
     .dashboard-section-wrapper {
         margin: 0;
-        @media screen and (max-width: 470px) {
-            margin-left: auto;
-            margin-right: auto;
-            height: auto;
-            width: auto;
-        }
         .orders-section-left {
             width: 25%;
             float: left;

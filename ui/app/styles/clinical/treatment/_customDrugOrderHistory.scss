@@ -86,17 +86,7 @@ If each of a table rows have multiple possible actions associated with them, use
 
 
 */
-.drug-orders-history-button-group{
-  @media screen and (max-width: 470px) {
-    width: 16%;
-    margin: 2% !important;
-  }
-}
-@media screen and (max-width: 470px) {
-  .drugs-refill-button {
-    margin: 8px 2px;
-  }
-}
+
 .drugOrderHistorySectionContainer{
   .drugOrderTable{
     width:100%;

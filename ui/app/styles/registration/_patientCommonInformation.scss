@@ -32,9 +32,6 @@ form .form-field{
       }
       label{
         width: 17em !important;
-        @media (max-width : 470px) {
-          width: 100% !important;
-        }
         @media (max-width : 580px) {
           text-align: left !important;
           float: none;
@@ -209,11 +206,6 @@ section.form-field-inline{
   }
 }
 
-@media (max-width: 470px) {
-  .button-margin-bottom {
-    margin-bottom: 1rem;
-  }
-}
 .selectGender{
   border: 1px solid $lighterGray;
   border-radius: 5px;
@@ -263,10 +255,6 @@ section.form-field-inline{
         }
         @media (max-width: 768px) {
           padding-left: 10px;
-        }
-        @media (max-width: 470px) {
-          padding-left: 0;
-          margin-bottom: 0.4rem;
         }
       }
       #patientID{

@@ -10,21 +10,8 @@ angular.module('bahmni.clinical')
             var currentVisit = visitHistory.activeVisit;
             var activeDrugOrdersList = [];
             var prescribedDrugOrders = [];
-            $scope.selectedDrugGroup = {};
             $scope.dispensePrivilege = Bahmni.Clinical.Constants.dispensePrivilege;
             $scope.scheduledDate = DateUtil.getDateWithoutTime(DateUtil.addDays(DateUtil.now(), 1));
-
-            var someFunc = function () {
-                console.log('x,jbckhdb vjmcb kmj,mcn cx', $scope.consultation.drugOrderGroups);
-                // $scope.selectedDrugGroup = $scope.consultation.drugOrderGroups;
-                console.log('x,jbckhdb vjmcb kmj,mcn cx11', $scope.consultation.drugOrderGroups, $scope.selectedDrugGroup);
-                $scope.consultation.drugOrderGroups.forEach(function (value, key) {
-                    if (value.selected) {
-                        console.log('akskskskkskmafjafhjdak', value);
-                        $scope.selectedDrugGroup = value;
-                    }
-                });
-            };
 
             var createPrescriptionGroups = function (activeAndScheduledDrugOrders) {
                 $scope.consultation.drugOrderGroups = [];
@@ -149,10 +136,10 @@ angular.module('bahmni.clinical')
             };
 
             $scope.refillAll = function (drugOrders) {
-                console.log('sdjhbmckdjvbsdfjk', $scope.consultation.drugOrderGroups, drugOrders);
                 $rootScope.$broadcast("event:refillDrugOrders", drugOrders);
             };
 
+<<<<<<< HEAD
             $scope.refillAll = function () {
                 console.log('sdjhbmckdjvbsdfjk1', $scope.selectedDrugGroup, $scope.consultation.drugOrderGroups);
                 const item = $scope.selectedDrugGroup.trim();
@@ -164,6 +151,8 @@ angular.module('bahmni.clinical')
                 });
             };
 
+=======
+>>>>>>> parent of 134020382... Fixes Styling for mobile App
             $scope.revise = function (drugOrder, drugOrders) {
                 if ($scope.consultation.drugOrdersWithUpdatedOrderAttributes[drugOrder.uuid]) {
                     delete $scope.consultation.drugOrdersWithUpdatedOrderAttributes[drugOrder.uuid];
@@ -230,7 +219,7 @@ angular.module('bahmni.clinical')
 
             $scope.updateAllOrderAttributesByName = function (orderAttribute, drugOrderGroup) {
                 drugOrderGroup[orderAttribute.name] = drugOrderGroup[orderAttribute.name] || {};
-                drugOrderGroup[orderAttribute.name].selected = !drugOrderGroup[orderAttribute.name].selected;
+                drugOrderGroup[orderAttribute.name].selected = drugOrderGroup[orderAttribute.name].selected ? false : true;
 
                 drugOrderGroup.drugOrders.forEach(function (drugOrder) {
                     var selectedOrderAttribute = getAttribute(drugOrder, orderAttribute.name);

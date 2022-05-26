@@ -8,10 +8,7 @@
                         ng-model="searchParameters.registrationNumber" focus-me="true"
                                placeholder="{{ ::'REGISTRATION_LABEL_ENTER_ID' | translate}}">
                         <div class="reg-srch-btn fl">
-                            <button tabindex="3" type="submit" ng-disabled="!searchParameters.registrationNumber" >
-                                <i class="fa fa-search sm-hide"></i>
-                                <span class="xs-hide">{{ ::'REGISTRATION_LABEL_SEARCH' | translate}}</span>
-                            </button>
+                            <button tabindex="3" type="submit" ng-disabled="!searchParameters.registrationNumber" >{{ ::'REGISTRATION_LABEL_SEARCH' | translate}}</button>
                         </div>
                     </div>
 

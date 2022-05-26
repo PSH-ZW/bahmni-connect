@@ -36,7 +36,6 @@
       button {
         @include button($success, darken($success, 8%), $white);
         font-size: 14px;
-        min-width: 11rem;
         border-color: darken($success, 12%);
       }
     }

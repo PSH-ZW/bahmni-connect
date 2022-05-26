@@ -89,17 +89,6 @@ angular.module('bahmni.clinical').controller('ConsultationController',
             $scope.availableBoards = [];
             $scope.configName = $stateParams.configName;
 
-            $scope.update = function () {
-                console.log('ckhbvkzhvbksfgb', $scope.availableBoards);
-                $scope.availableBoards.forEach(function (value, key) {
-                    const label = $filter('titleTranslate')(value);
-                    const item = $scope.selectedItem.trim();
-                    if (label === item) {
-                        return buttonClickAction(value);
-                    }
-                });
-            };
-
             $scope.getTitle = function (board) {
                 return $filter('titleTranslate')(board);
             };

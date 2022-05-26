@@ -14,7 +14,7 @@
                 ng-href="{{generateBedManagementURL(consultation.uuid)}}" title="{{ipdButtonConfig.title}}">
                 <i class="fa fa-bed fa-white"></i>
             </a>
-            <a class="back-btn-link xs-hide" id="dashboard-link" accesskey="d" ng-click="gotoPatientDashboard()" title="Back to {{patient.name}} Dashboard">
+            <a class="back-btn-link" id="dashboard-link" accesskey="d" ng-click="gotoPatientDashboard()" title="Back to {{patient.name}} Dashboard">
                 <img class="patient-image" ng-src="{{::patient.image}}" fallback-src="../images/blank-user.gif">
               <span class="patient-info">
                 <span class="patient-name" >{{patient.name}} </span>
@@ -23,18 +23,11 @@
             </a>
 
 
-            <ul class="header-tabs consultation-tabs xs-hide">
+            <ul class="header-tabs consultation-tabs">
                 <li class="tab-item" ng-repeat="board in availableBoards track by $index" ng-class="{'tab-selected':board.isSelectedTab}">
                     <a ng-click="showBoard($index)">{{ board | titleTranslate }}</a>
                 </li>
             </ul>
-            <span class="sm-hide">
-                <select  ng-model="selectedItem" class="consultation-select" ng-change="update()">
-                    <option ng-repeat="board in availableBoards track by $index">
-                        <a ng-click="showBoard($index)">{{ board | titleTranslate }}</a>
-                    </option>
-                </select>
-            </span>
 
             <button class="toggle-patient" ng-click="toggleControlPanel()" ng-class="{'shift': showControlPanel, 'hide-ipad': availableBoards }">
                 <i class="fa fa-bars fa-white fa-large"></i>
@@ -55,7 +48,7 @@
                 </div>
             </div> -->
             <button class="confirm save-consultation" ng-show="availableBoards" single-click="save()" accesskey="{{'SAVE_ACCESS_KEY' | translate}}" ng-class="{'hideSaveText':availableBoards.length > 6}">
-                <i class="fa fa-save  xs-hide"></i>
+                <i class="fa fa-save"></i>
                 <span class="text" ng-bind-html="'CLINICAL_SAVE_TRANSLATION_KEY'| translate"></span>
             </button>
         </div>
@@ -68,7 +61,11 @@
         <div class="opd-header-bottom tabs">
             <bm-back-links></bm-back-links>
             <recent-patients></recent-patients>
+<<<<<<< HEAD
             <!-- <a show-if-privilege="app:adt" class="back-btn xs-hide" ng-click= "displayConfirmationDialog($event)" ng-href="../adt/#/patient/{{patient.uuid}}/visit/{{visitHistory.activeVisit.uuid}}/"
+=======
+            <a show-if-privilege="app:adt" class="back-btn" ng-click= "displayConfirmationDialog($event)" ng-href="../adt/#/patient/{{patient.uuid}}/visit/{{visitHistory.activeVisit.uuid}}/"
+>>>>>>> parent of 134020382... Fixes Styling for mobile App
                title="Go to IPD Dashboard">
                 <i class="fa fa-bed fa-white"></i>
             </a> -->
@@ -101,7 +98,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="clinical-header mobile-menu fl xs-hide">
+            <div class="clinical-header mobile-menu fl">
                 <a id="MobileDashboardButton" class="mobile-menu-icon" ng-click="toggleDashboardMenu()">
                     <i class="fa fa-bars fa-white fa-small"></i>
                     <span>Dashboard</span>
@@ -130,7 +127,7 @@
                     <i class="fa fa-print"></i>
 
                 </button>
-                <div class="dashboard-date-picker xs-hide" ng-controller="PatientListHeaderController">
+                <div class="dashboard-date-picker" ng-controller="PatientListHeaderController">
                     <div class="retro-date-widget-wrapper fr">
                         <div class="retro-date-widget-header fr">
                             <button ng-click="popUpHandler()" show-if-privilege="{{retrospectivePrivilege}},{{onBehalfOfPrivilege}},{{locationPickerPrivilege}}" ng-if="getTitle()">{{ getTitle() }}</button>
