@@ -224,7 +224,8 @@ angular.module('bahmni.clinical')
                     var formUuid = observationForm.formUuid || observationForm.uuid;
                     var formName = observationForm.name || observationForm.formName;
                     var formVersion = observationForm.version || observationForm.formVersion;
-                    forms.push(new Bahmni.ObservationForm(formUuid, $rootScope.currentUser, formName, formVersion, observations));
+                    const extension = _.find(extensions, { extensionParams: { conceptName: formName } });
+                    forms.push(new Bahmni.ObservationForm(formUuid, $rootScope.currentUser, formName, formVersion, observations, extension));
                 });
                 return forms;
             };

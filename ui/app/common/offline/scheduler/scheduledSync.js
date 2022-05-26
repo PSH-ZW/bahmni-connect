@@ -2,9 +2,9 @@
 
 angular.module("bahmni.common.offline")
     .service("scheduledSync", ['$q', '$rootScope', 'scheduledJob', 'offlineService', 'offlineDbService', 'androidDbService', 'offlinePush', 'offlinePull',
-        'appUpdateService', 'ngDialog',
+        'appUpdateService', 'ngDialog', 'appService',
         function ($q, $rootScope, scheduledJob, offlineService, offlineDbService, androidDbService, offlinePush, offlinePull,
-                  appUpdateService, ngDialog) {
+                appUpdateService, ngDialog, appService) {
             return function (syncButtonConfig) {
                 var job;
                 if (offlineService.isAndroidApp()) {
@@ -14,7 +14,7 @@ angular.module("bahmni.common.offline")
                 if (syncButtonConfig === undefined) {
                     syncButtonConfig = {delay: offlineService.getItem('schedulerInterval'), repeat: 0};
                 }
-                var multiStageWorker = new Bahmni.Common.Offline.MultiStageWorker($q);
+                var multiStageWorker = new Bahmni.Common.Offline.MultiStageWorker($q, appService);
                 var STAGES = {
                     STAGE0: "STAGE 0",
                     STAGE1: "STAGE 1",

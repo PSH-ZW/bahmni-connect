@@ -31,6 +31,7 @@ angular.module('bahmni.registration')
 
             $scope.onClickDownload = function (patient, index) {
                 var pat = $scope.results[index];
+                ngDialog.close();
                 patientService.get(patient.uuid).then(function (response) {
                     if (response && response.patient) {
                         ngDialog.open({

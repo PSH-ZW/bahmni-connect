@@ -45,12 +45,12 @@ angular.module('bahmni.common.offline')
                 var defer = $q.defer();
                 $http.get(url, config).success(function (patient) {
                     // get encounters for patient and save
-                    console.log('downloading patient', patient);
+                    // console.log('downloading patient', patient);
                     $http.get(Bahmni.Common.Constants.encounterUrl, {
                         params: { patient: patientUuid },
                         withCredentials: true
                     }).success(function (response) {
-                        console.log('downloading encounter', response);
+                        // console.log('downloading encounter', response);
                         var promises = [];
                         var encounters = response.results || [];
                         _.map(encounters, function (encounter) {
@@ -400,7 +400,8 @@ angular.module('bahmni.common.offline')
 
             return {
                 sync: sync,
-                saveData: saveData
+                saveData: saveData,
+                downloadAndSavePatient: downloadAndSavePatient
             };
         }
     ]);

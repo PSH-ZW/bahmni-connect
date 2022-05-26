@@ -38,7 +38,7 @@
                     <input tabindex="4" type="text" id="programAttribute" ng-model="searchParameters.programAttributeFieldValue" placeholder="{{ ::programAttributesSearchConfig.placeholder}}">
                 </article>
 
-                <article class="fl">
+                <article class="fl sm-fullWidth">
                     <label for="name"><strong>Remote Search</strong></label>
                     <input style="margin-top: 10px;" tabindex="4" type="checkbox" id="remoteSearch" ng-model="searchParameters.remoteSearch" ng-change="onToggleRemoteSearch(searchParameters.remoteSearch)"/>
                 </article>
@@ -84,10 +84,15 @@
                     <i ng-if="result.failed" ng-click="onClickDownload(result, $index)" class="fa fa-exclamation-triangle"></i>
                 </td>
                 <td>
-                    <a tabindex="{{ :: 7 + $index + 1 }}" ng-if="::(searchActions.length > 0)" ng-click="forPatient(result).doExtensionAction(searchActions[0])">
+                    <span ng-if="searchParameters.remoteSearch && !result.downloaded">
+                        {{::result.identifier || 'Not Assigned'}}
+                    </span>
+                    <span ng-if="!searchParameters.remoteSearch || result.downloaded">
+                        <a tabindex="{{ :: 7 + $index + 1 }}" ng-if="::(searchActions.length > 0)" ng-click="forPatient(result).doExtensionAction(searchActions[0])">
                         {{::result.identifier || 'Not Assigned'}}
                     </a>
-                </td>
+                    </span>
+                 </td>
                 <td ng-repeat = "type in ::extraIdentifierTypes track by $index">
                     {{::result.extraIdentifiers[type.name]}}
                 </td>

@@ -127,6 +127,15 @@ angular.module('bahmni.clinical').controller('ConsultationController',
                 }
             };
 
+            // ipd button show/hide configuration support
+            $scope.isGoToIPDButtonHidden = function () {
+                return $scope.ipdButtonConfig.hideGoToIPDButton;
+            };
+
+            $scope.generateBedManagementURL = function (visitUuid) {
+                return appService.getAppDescriptor().formatUrl($scope.ipdButtonConfig.forwardUrl, {'patientUuid': $scope.patient.uuid, 'visitUuid': visitUuid});
+            };
+
             var isLongerName = function (value) {
                 return value ? value.length > 18 : false;
             };
@@ -161,6 +170,7 @@ angular.module('bahmni.clinical').controller('ConsultationController',
                 var appExtensions = clinicalAppConfigService.getAllConsultationBoards();
                 $scope.availableBoards = $scope.availableBoards.concat(appExtensions);
                 $scope.showSaveConfirmDialogConfig = appService.getAppDescriptor().getConfigValue('showSaveConfirmDialog');
+                $scope.ipdButtonConfig = appService.getAppDescriptor().getConfigValue('ipdButton') || { "hideGoToIPDButton": true };
                 setCurrentBoardBasedOnPath();
             };
 

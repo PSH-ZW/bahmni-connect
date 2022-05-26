@@ -1,6 +1,6 @@
 'use strict';
 
-Bahmni.Common.Offline.MultiStageWorker = function ($q) {
+Bahmni.Common.Offline.MultiStageWorker = function ($q, appService) {
     var self = this;
     this.stages = [];
     this.paused = false;
@@ -25,6 +25,11 @@ Bahmni.Common.Offline.MultiStageWorker = function ($q) {
 
     this.execute = function () {
         self.paused = false;
+        // console.log('in multistage worker');
+        if (appService && appService.getAppName() === 'clinical') {
+            // console.log('in multistage worker pausing sync');
+            self.pause();
+        }
         return getStagesToBeExecuted().reduce(function (promise, worker) {
             return promise.then(checkForPause).then(function () {
                 self.currentlyExecutingStage = worker;

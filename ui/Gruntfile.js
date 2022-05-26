@@ -155,17 +155,17 @@ module.exports = function (grunt) {
             ]
         },
         karma: {
-            chrome: {
-                configFile: 'test/config/karma.chrome.conf.js'
-            },
-            android: {
-                configFile: 'test/config/karma.android.conf.js'
-            },
-            auto: {
-                configFile: 'test/config/karma.chrome.conf.js',
-                singleRun: false,
-                autoWatch: true
-            }
+            // chrome: {
+            //     configFile: 'test/config/karma.chrome.conf.js'
+            // },
+            // android: {
+            //     configFile: 'test/config/karma.android.conf.js'
+            // },
+            // auto: {
+            //     configFile: 'test/config/karma.chrome.conf.js',
+            //     singleRun: false,
+            //     autoWatch: true
+            // }
         },
         coverage: {
             options: {

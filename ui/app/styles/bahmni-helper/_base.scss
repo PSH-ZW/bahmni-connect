@@ -251,6 +251,11 @@ table {
   overflow: hidden;
 }
 
+.sm-fullWidth {
+  @media (max-width : 768px){
+    width: 100%;
+  }
+}
 
 .align-center {
   text-align: center;

@@ -5,8 +5,13 @@
         <div class="opd-header-bottom tabs">
             <bm-back-links></bm-back-links>
             <recent-patients ng-if="enablePatientSearch()"></recent-patients>
-            <a show-if-privilege="app:adt" ng-click= "displayConfirmationDialog($event)" class="back-btn xs-hide"  ng-href="../adt/#/patient/{{patient.uuid}}/visit/{{consultation.visitUuid}}/"
+            <!-- <a show-if-privilege="app:adt" ng-click= "displayConfirmationDialog($event)" class="back-btn xs-hide"  ng-href="../adt/#/patient/{{patient.uuid}}/visit/{{consultation.visitUuid}}/"
                title="Go to IPD dashboard">
+                <i class="fa fa-bed fa-white"></i>
+            </a> -->
+            <a show-if-privilege="{{ipdButtonConfig.privilege}}" ng-if="!isGoToIPDButtonHidden()"
+                ng-click= "displayConfirmationDialog($event)" class="back-btn xs-hide"
+                ng-href="{{generateBedManagementURL(consultation.uuid)}}" title="{{ipdButtonConfig.title}}">
                 <i class="fa fa-bed fa-white"></i>
             </a>
             <a class="back-btn-link xs-hide" id="dashboard-link" accesskey="d" ng-click="gotoPatientDashboard()" title="Back to {{patient.name}} Dashboard">
@@ -34,7 +39,7 @@
             <button class="toggle-patient" ng-click="toggleControlPanel()" ng-class="{'shift': showControlPanel, 'hide-ipad': availableBoards }">
                 <i class="fa fa-bars fa-white fa-large"></i>
             </button>
-            <div class="fr">
+            <!-- <div class="fr">
                 <div ng-if="isOfflineApp" class="offline-sync fl" ng-controller="AppUpdateController">
                     <button class="btn" ng-if="isUpdateAvailable()" ng-click="update()">Update</button>
                 </div>
@@ -43,12 +48,12 @@
                     <button class="btn fl  offline-sync" ng-click="sync()" ng-show="isOfflineApp && !isSyncing">
                         {{::'HEADER_LABEL_SYNC_KEY' | translate}}
                     </button>
-                    <button class="btn fl offline-sync offline-sync-image" ng-show="isOfflineApp && isSyncing" disabled>
+                    <button class="btn fl offline-sync offline-sync-image" ng-show="isOfflineApp && isSyncing" disabled> -->
                         <!-- <i class="fa fa-refresh"></i> -->
-                        <img src="../images/sync.gif" />
+                        <!-- <img src="../images/sync.gif" />
                     </button>
                 </div>
-            </div>
+            </div> -->
             <button class="confirm save-consultation" ng-show="availableBoards" single-click="save()" accesskey="{{'SAVE_ACCESS_KEY' | translate}}" ng-class="{'hideSaveText':availableBoards.length > 6}">
                 <i class="fa fa-save  xs-hide"></i>
                 <span class="text" ng-bind-html="'CLINICAL_SAVE_TRANSLATION_KEY'| translate"></span>
@@ -63,8 +68,13 @@
         <div class="opd-header-bottom tabs">
             <bm-back-links></bm-back-links>
             <recent-patients></recent-patients>
-            <a show-if-privilege="app:adt" class="back-btn xs-hide" ng-click= "displayConfirmationDialog($event)" ng-href="../adt/#/patient/{{patient.uuid}}/visit/{{visitHistory.activeVisit.uuid}}/"
+            <!-- <a show-if-privilege="app:adt" class="back-btn xs-hide" ng-click= "displayConfirmationDialog($event)" ng-href="../adt/#/patient/{{patient.uuid}}/visit/{{visitHistory.activeVisit.uuid}}/"
                title="Go to IPD Dashboard">
+                <i class="fa fa-bed fa-white"></i>
+            </a> -->
+            <a show-if-privilege="{{ipdButtonConfig.privilege}}" ng-if="!isGoToIPDButtonHidden()"
+                ng-click= "displayConfirmationDialog($event)" class="back-btn xs-hide"
+                ng-href="{{generateBedManagementURL(consultation.uuid)}}" title="{{ipdButtonConfig.title}}">
                 <i class="fa fa-bed fa-white"></i>
             </a>
             <div class="desktop-menu fl">
@@ -136,7 +146,7 @@
                     ng-bind-html="'CONSULTATION_TAB_KEY' | translate">
                  </a>
 
-                <div class="fl offlin-sync-wrap" ng-controller="PatientListHeaderController">
+                <!-- <div class="fl offlin-sync-wrap" ng-controller="PatientListHeaderController">
                      <div ng-if="isOfflineApp" class="offline-sync fl" ng-controller="AppUpdateController">
                         <button class="btn" ng-if="isUpdateAvailable()" ng-click="update()">Update</button>
                      </div>
@@ -144,10 +154,10 @@
                       {{::'HEADER_LABEL_SYNC_KEY' | translate}}
                     </button>
                     <button class="btn fl offline-sync offline-sync-image" ng-show="isOfflineApp && isSyncing" disabled>
-                      <!-- <i class="fa fa-refresh"></i> -->
+                      <i class="fa fa-refresh"></i>
                       <img src="../images/sync.gif" />
                     </button>
-                </div>
+                </div> -->
                 <a class="btn--right btn--success " title="Open in new window"
                    ng-if="visitHistory.activeVisit || retrospectiveEntry"
                    ng-click="openConsultationInNewTab()"><i class="fa fa-external-link"></i></a>

@@ -32,3 +32,4 @@ ui/common.offline.min.js
 ui/androidDist/
 ui/bahmni-connect-apps.zip
 ui/bahmni-connect-apps/
+yarn.lock
