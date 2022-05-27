@@ -139,7 +139,6 @@ angular.module('bahmni.clinical')
                 $rootScope.$broadcast("event:refillDrugOrders", drugOrders);
             };
 
-<<<<<<< HEAD
             $scope.refillAll = function () {
                 console.log('sdjhbmckdjvbsdfjk1', $scope.selectedDrugGroup, $scope.consultation.drugOrderGroups);
                 const item = $scope.selectedDrugGroup.trim();
@@ -151,8 +150,6 @@ angular.module('bahmni.clinical')
                 });
             };
 
-=======
->>>>>>> parent of 134020382... Fixes Styling for mobile App
             $scope.revise = function (drugOrder, drugOrders) {
                 if ($scope.consultation.drugOrdersWithUpdatedOrderAttributes[drugOrder.uuid]) {
                     delete $scope.consultation.drugOrdersWithUpdatedOrderAttributes[drugOrder.uuid];
