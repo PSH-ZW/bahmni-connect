@@ -78,7 +78,7 @@ angular.module('bahmni.registration')
                 return $scope.searchParameters.name.trim().length > 0 ||
                     $scope.searchParameters.addressFieldValue.trim().length > 0 ||
                     $scope.searchParameters.customAttribute.trim().length > 0 ||
-                    $scope.searchParameters.programAttributeFieldValue.trim().length > 0;
+                    $scope.searchParameters.programAttributeFieldValue.trim().length > 0 || $scope.searchParameters.registrationNumber.trim().length > 0;
             };
 
             var searchBasedOnQueryParameters = function (offset) {
@@ -99,7 +99,7 @@ angular.module('bahmni.registration')
                     searching = true;
                     var searchPromise = patientService.search(
                         $scope.searchParameters.name,
-                        undefined,
+                        $scope.searchParameters.registrationNumber,
                         $scope.addressSearchConfig.field,
                         $scope.searchParameters.addressFieldValue,
                         $scope.searchParameters.customAttribute,

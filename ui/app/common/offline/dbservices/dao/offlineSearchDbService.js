@@ -13,8 +13,9 @@ angular.module('bahmni.common.offline')
             };
 
             if ($rootScope.searching) {
-                response.data.pageOfResults.push({});
-                return defer.resolve(response);
+                // response.data.pageOfResults.push({});
+                defer.resolve(response);
+                return defer.promise;
             }
 
             $rootScope.searching = true;
