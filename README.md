@@ -35,3 +35,24 @@ Please visit [Bahmni Wiki](https://bahmni.atlassian.net/wiki/spaces/BAH/pages/46
     |-- .jshint.rc
     |-- package.json
 </pre>
+
+
+##Server Setup
+
+yum install bahmni-offline
+
+yum install bahmni-event-log-service
+
+service bahmni-event-log-service start
+
+Update the DB password in the script if there are errors.
+python /opt/bahmni-event-log-service/bahmni-event-log-service/WEB-INF/classes/sql-scripts/copyOfflineConcepts.py
+
+bahmni -i local install
+
+copy bahmniOfflineSync.omod from production.
+
+change syncStratergy
+
+copy and softLink psi_config
+
