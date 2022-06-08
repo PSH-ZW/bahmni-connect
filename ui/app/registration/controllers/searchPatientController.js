@@ -28,7 +28,9 @@ angular.module('bahmni.registration')
             $scope.onToggleRemoteSearch = function (remoteSearch) {
                 $scope.results = [];
             };
-
+            $scope.onTogglefs = function () {
+                offlineSyncService.forceSyncForCategory();
+            };
             $scope.onClickDownload = function (patient, index) {
                 var pat = $scope.results[index];
                 ngDialog.close();
@@ -95,11 +97,12 @@ angular.module('bahmni.registration')
                 $scope.searchParameters.personSearchResultsConfig = searchParameters.personSearchResultsConfig || '';
 
                 $scope.searchParameters.registrationNumber = searchParameters.registrationNumber || "";
+                var regNumber = $scope.searchParameters.registrationNumber !== '' ? $scope.searchParameters.registrationNumber : undefined;
                 if (hasSearchParameters()) {
                     searching = true;
                     var searchPromise = patientService.search(
                         $scope.searchParameters.name,
-                        $scope.searchParameters.registrationNumber,
+                        regNumber,
                         $scope.addressSearchConfig.field,
                         $scope.searchParameters.addressFieldValue,
                         $scope.searchParameters.customAttribute,

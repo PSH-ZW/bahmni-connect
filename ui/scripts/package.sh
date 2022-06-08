@@ -10,7 +10,9 @@ if [ -z "$1" ]; then
 else
     yarn bundle --gruntfile $1
 fi
-
+rm -Rf bahmni-connect-apps
+rm -Rf androidDist
+rm -Rf bahmni-connect-apps.zip
 mkdir bahmni-connect-apps
 mkdir androidDist
 

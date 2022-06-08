@@ -28,8 +28,8 @@ angular.module('bahmni.common.offline')
                 if (count != patients.length) {
                     return saveData({category: 'patient'}, {data: patients[count]}).then(function () {
                         updateSavedEventsCount('patient');
-                        return (offlineService.isAndroidApp() && count % 10 == 0) ?
-                            $timeout(savePatients, 100, true, patients, ++count) : savePatients(patients, ++count);
+                        return (offlineService.isAndroidApp() && count % 10 == 0)
+                            ? $timeout(savePatients, 100, true, patients, ++count) : savePatients(patients, ++count);
                     });
                 }
                 return $q.when();
@@ -207,6 +207,23 @@ angular.module('bahmni.common.offline')
                     }
                     return syncForMarker(category, marker, isInitSync);
                 });
+            };
+
+            var forceSyncForCategory = function () {
+                var category = "forms";
+                categories = ["forms"];
+                var marker = {
+                    "markerName": "forms",
+                    "lastReadEventUuid": null,
+                    "filters": [],
+                    "lastReadTime": "2022-06-07T06:44:19.637Z"
+                };
+                $rootScope.initSyncInfo = {};
+                $rootScope.showSyncInfo = true;
+                $rootScope.initSyncInfo[category] = {};
+                $rootScope.initSyncInfo[category].pendingEventsCount = 0;
+                $rootScope.initSyncInfo[category].savedEventsCount = 0;
+                return syncForMarker(category, marker, true);
             };
 
             var updatePendingEventsCount = function (category, pendingEventsCount) {
@@ -401,7 +418,8 @@ angular.module('bahmni.common.offline')
             return {
                 sync: sync,
                 saveData: saveData,
-                downloadAndSavePatient: downloadAndSavePatient
+                downloadAndSavePatient: downloadAndSavePatient,
+                forceSyncForCategory: forceSyncForCategory
             };
         }
     ]);
