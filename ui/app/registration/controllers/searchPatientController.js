@@ -34,8 +34,10 @@ angular.module('bahmni.registration')
             $scope.onClickDownload = function (patient, index) {
                 var pat = $scope.results[index];
                 ngDialog.close();
+                var fa = false;
                 patientService.get(patient.uuid).then(function (response) {
-                    if (response && response.patient) {
+                    if (response && response.patient && fa) {
+                        // skipping this condition to enable refresh of patient data
                         ngDialog.open({
                             template: 'views/patientSync/patientDownload.html',
                             scope: $scope,

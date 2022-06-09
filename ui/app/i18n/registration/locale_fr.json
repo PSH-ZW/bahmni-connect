@@ -66,6 +66,7 @@
   "REGISTRATION_TITLE_RELATIONSHIPS":"<u>r</u>apports",
   "REGISTRATION_CONTENT_ENTERING_ID":"Vous entrez dans une pièce d'identité qui est <strong > {{ }} sizeOfTheJump < / strong > avant de la séquence . Il va créer un écart de {{ }} sizeOfTheJump dans la séquence . Voulez-vous continuer?",
   "REGISTRATION_LABEL_SAVED" : "Enregistré",
+  "PREP_OI_ERROR": "Given Prep/Oi Identifier is not matching with the Expected Pattern",
   "REGISTRATION_NO_RESULTS_FOUND":"Aucun résultat trouvé",
   "REGISTRATION_LABEL_COULD_NOT_FIND_PATIENT":"Impossible de trouver le patient avec identifiant {{ }} patientIdentifier . S'il vous plaît vérifier l' identité du patient entré ou créer un nouvel enregistrement patient avec cette ID .",
   "REGISTRATION_VISIT_CANNOT_BE_CLOSED":"La visite de patient admis ne peut pas être fermé . Décharge du patient et essayez à nouveau",

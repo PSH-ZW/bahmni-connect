@@ -513,8 +513,8 @@ module.exports = function (grunt) {
 
     grunt.registerTask('devchrome', ['devbundle', 'preprocess:chrome', "toggleComments", 'generate-sw']);
     grunt.registerTask('devandroid', ['devbundle', 'preprocess:android', "toggleComments", 'clean:androidApp', 'copy:androidApp']);
-    grunt.registerTask('chrome', ['bundle', 'karma:chrome', 'coverage', 'uglify-and-rename', 'preprocess:chrome']);
-    grunt.registerTask('android', ['bundle', 'karma:android', 'coverage', 'uglify-and-rename', 'preprocess:android', 'toggleComments']);
+    grunt.registerTask('chrome', ['bundle', 'uglify-and-rename', 'preprocess:chrome']);
+    grunt.registerTask('android', ['bundle', 'uglify-and-rename', 'preprocess:android', 'toggleComments']);
 
     grunt.registerTask('generate-sw', 'generate service worker file', function () {
         var exec = require('child_process').exec;

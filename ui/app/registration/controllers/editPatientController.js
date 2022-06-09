@@ -89,6 +89,57 @@ angular.module('bahmni.registration')
             };
 
             $scope.afterSave = function () {
-                messagingService.showMessage("info", "REGISTRATION_LABEL_SAVED");
+                var identifiers = _.get($scope, 'openMRSPatient.identifiers', []);
+                var prepoi = _.filter(identifiers, function (id) {
+                    return _.get(id, 'identifierType.name') === 'PREP/OI Identifier';
+                });
+                if (prepoi.length > 0) {
+                    prepoi = prepoi[0];
+                    prepoi = _.get(prepoi, 'extraIdentifiers.PREP/OI Identifier', '');
+                    prepoi = prepoi && prepoi.trim();
+                } else {
+                    prepoi = null;
+                }
+
+                var flag = true;
+                var r1 = new RegExp("\\w{2}-\\w{2}-\\w{2}-\\d{4}-[P]{1}-\\d{5}", 'i');
+                var r2 = new RegExp("\\w{2}-\\w{2}-\\w{2}-\\d{4}-(A|PR){1}-\\d{5}", 'i');
+                if (prepoi) {
+                    if (!r1.test(prepoi) && !r2.test(prepoi)) {
+                        messagingService.showMessage("error", "Given Prep/Oi Identifier is not matching with the Expected Pattern");
+                        flag = false;
+                    } else {
+                        var year = prepoi.split("-")[3];
+                        year = year && Number(year);
+                        var currentYear = new Date();
+                        currentYear = currentYear.getFullYear();
+                        if (year > currentYear) {
+                            messagingService.showMessage("error", "Year in identifier cannot be greater than current year.");
+                            flag = false;
+                        }
+                    }
+                } else {
+                    $scope.patient.extraIdentifiers = _.filter(identifiers, function (id) {
+                        return _.get(id, 'identifierType.name') !== 'PREP/OI Identifier';
+                    });
+                    $scope.openMRSPatient.identifiers = _.filter(identifiers, function (id) {
+                        return _.get(id, 'identifierType.name') !== 'PREP/OI Identifier';
+                    });
+
+                    spinner.forPromise(patientService.update($scope.patient, $scope.openMRSPatient).then(function (result) {
+                        var patientProfileData = result.data;
+                        if (!patientProfileData.error) {
+                            $scope.openMRSPatient = patientProfileData["patient"];
+                            $scope.patient = openmrsPatientMapper.map(patientProfileData);
+                            $scope.patientLoaded = true;
+                        }
+                    }));
+                }
+
+                if (!flag) {
+                    messagingService.showMessage("error", "PREP_OI_ERROR");
+                } else {
+                    messagingService.showMessage("info", "REGISTRATION_LABEL_SAVED");
+                }
             };
         }]);

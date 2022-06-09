@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('bahmni.registration')
-    .controller('PatientCommonController', ['$scope', '$rootScope', '$http', 'patientAttributeService', 'appService', 'spinner', '$location', 'ngDialog', '$window', '$state',
-        function ($scope, $rootScope, $http, patientAttributeService, appService, spinner, $location, ngDialog, $window, $state) {
+    .controller('PatientCommonController', ['$scope', '$rootScope', '$http', 'patientAttributeService', 'appService', 'spinner', '$location', 'ngDialog', '$window', '$state', 'messagingService',
+        function ($scope, $rootScope, $http, patientAttributeService, appService, spinner, $location, ngDialog, $window, $state, messagingService) {
             var autoCompleteFields = appService.getAppDescriptor().getConfigValue("autoCompleteFields", []);
             var showCasteSameAsLastNameCheckbox = appService.getAppDescriptor().getConfigValue("showCasteSameAsLastNameCheckbox");
             var personAttributes = [];
@@ -187,6 +187,46 @@ angular.module('bahmni.registration')
 
             $scope.disableIsDead = function () {
                 return ($scope.patient.causeOfDeath || $scope.patient.deathDate) && $scope.patient.dead;
+            };
+            $scope.prepoiValidate = function () {
+                var identifiers = _.get($scope, 'openMRSPatient.identifiers', []);
+                var prepoi = _.filter(identifiers, function (id) {
+                    return _.get(id, 'identifierType.name') === 'PREP/OI Identifier';
+                });
+                if (prepoi.length > 0) {
+                    prepoi = prepoi[0];
+                    prepoi = _.get(prepoi, 'extraIdentifiers.PREP/OI Identifier', '').trim();
+                } else {
+                    prepoi = null;
+                }
+
+                var flag = true;
+                var r1 = new RegExp("\\w{2}-\\w{2}-\\w{2}-\\d{4}-[P]{1}-\\d{5}", 'i');
+                var r2 = new RegExp("\\w{2}-\\w{2}-\\w{2}-\\d{4}-(A|PR){1}-\\d{5}", 'i');
+                if (prepoi && (!r1.test(prepoi) && !r2.test(prepoi))) {
+                    messagingService.showMessage("error", "Given Prep/Oi Identifier is not matching with the Expected Pattern");
+                    flag = false;
+                } else {
+                    var year = prepoi && prepoi.split("-")[3];
+                    year = year && Number(year);
+                    var currentYear = new Date();
+                    currentYear = currentYear.getFullYear();
+                    if (year > currentYear) {
+                        messagingService.showMessage("error", "Year in identifier cannot be greater than current year.");
+                        flag = false;
+                    }
+                }
+
+                if (!flag) {
+                    messagingService.showMessage("error", "PREP_OI_ERROR");
+                    $scope.patient.extraIdentifiers = _.filter(identifiers, function (id) {
+                        return _.get(id, 'identifierType.name') !== 'PREP/OI Identifier';
+                    });
+                    $scope.openMRSPatient.identifiers = _.filter(identifiers, function (id) {
+                        return _.get(id, 'identifierType.name') !== 'PREP/OI Identifier';
+                    });
+                    $scope.update();
+                }
             };
         }]);
 

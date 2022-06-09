@@ -50,6 +50,25 @@ prototype.generate = function () {
     }
 };
 
+prototype.validateIdentifier = function () {
+    var prepoi = this.identifier;
+    var r1 = new RegExp("\\w{2}-\\w{2}-\\w{2}-\\d{4}-[P]{1}-\\d{5}", 'i');
+    var r2 = new RegExp("\\w{2}-\\w{2}-\\w{2}-\\d{4}-(A|PR){1}-\\d{5}", 'i');
+    if (prepoi && (!r1.test(prepoi) && !r2.test(prepoi))) {
+        alert("Given Prep/Oi Identifier is not matching with the Expected Pattern");
+        this.clearRegistrationNumber();
+    } else {
+        var year = prepoi && prepoi.split("-")[3];
+        year = year && Number(year);
+        var currentYear = new Date();
+        currentYear = currentYear.getFullYear();
+        if (year > currentYear) {
+            alert("Year in identifier cannot be greater than current year.");
+            this.clearRegistrationNumber();
+        }
+    }
+};
+
 prototype.clearRegistrationNumber = function () {
     this.registrationNumber = null;
     this.identifier = null;

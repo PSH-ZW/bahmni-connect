@@ -82,6 +82,7 @@
                     <i ng-if="!result.downloaded && !result.failed" ng-click="onClickDownload(result, $index)" class="fa fa-download"></i>
                     <!--<i ng-if="result.downloaded && !result.failed" ng-click="onClickDownload(result, $index)" class="fa fa-sync"></i>-->
                     <i ng-if="result.failed" ng-click="onClickDownload(result, $index)" class="fa fa-exclamation-triangle"></i>
+                    <i ng-if="result.downloaded && !result.failed" ng-click="onClickDownload(result, $index)" class="fa fa-refresh"></i>
                 </td>
                 <td>
                     <span ng-if="searchParameters.remoteSearch && !result.downloaded">

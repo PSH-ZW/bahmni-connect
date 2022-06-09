@@ -168,6 +168,7 @@
                                    ng-if="!identifier.hasIdentifierSources()"
                                    non-blank="identifier.identifierType.required && !identifier.hasIdentifierSources()"
                                    pattern-validate ng-change="identifier.generate()"
+                                   ng-blur="identifier.validateIdentifier()"
                                    ng-disabled="readOnlyExtraIdentifiers.indexOf(identifier.identifierType.name)>-1">
                         </div>
                     </article>

@@ -63,6 +63,7 @@
     "REGISTRATION_TITLE_RELATIONSHIPS": "Relacionamento",
     "REGISTRATION_CONTENT_ENTERING_ID": "You are entering ID(s) which is ahead of the Sequence. It will create a gap in the Sequence. Do you want to continue?",
     "REGISTRATION_LABEL_SAVED": "Salvo",
+    "PREP_OI_ERROR": "Given Prep/Oi Identifier is not matching with the Expected Pattern",
     "REGISTRATION_NO_RESULTS_FOUND": "Nenhum resultado encontrado",
     "REGISTRATION_INSUFFICIENT_PRIVILEGE": "Você não tem privilégio fazer esta ação.",
     "REGISTRATION_LABEL_COULD_NOT_FIND_PATIENT": "Não foi possível encontrar paciente com identificador {{patientIdentifier}}. Por favor, verifique a identificação do paciente entrou ou crie um novo registro de paciente com este ID.",
