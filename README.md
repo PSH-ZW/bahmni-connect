@@ -56,3 +56,6 @@ change syncStratergy
 
 copy and softLink psi_config
 
+import forms
+
+run sql for generating concepts and form event_logs;
