@@ -38,24 +38,36 @@ Please visit [Bahmni Wiki](https://bahmni.atlassian.net/wiki/spaces/BAH/pages/46
 
 
 ##Server Setup
-
-yum install bahmni-offline
-
 yum install bahmni-event-log-service
 
 service bahmni-event-log-service start
 
-Update the DB password in the script if there are errors.
-python /opt/bahmni-event-log-service/bahmni-event-log-service/WEB-INF/classes/sql-scripts/copyOfflineConcepts.py
-
-bahmni -i local install
+run liquibase for generating concepts and form event_logs;
 
 copy bahmniOfflineSync.omod from production.
 
-change syncStratergy
+Update the DB password in the script if there are errors.
+python /opt/bahmni-event-log-service/bahmni-event-log-service/WEB-INF/classes/sql-scripts/copyOfflineConcepts.py
 
-copy and softLink psi_config
+bahmni -i local concat-configs
 
-import forms
+restart openmrs
 
-run sql for generating concepts and form event_logs;
+bahmni -i local create-connect-artifacts
+
+vi /etc/bahmni-installer/local
+
+bahmni -i local install
+
+
+change syncStratergy from Openmrs > Administraion > Advanced Setting > set value as 'org.bahmni.module.bahmniOfflineSync.strategy.IDBasedSyncStrategy'
+
+
+replace `/var/www/bahmni_config/openmrs/apps/clinical/clinical.json` with config/clinical.json from this project.
+
+delete logs with non-existent concepts `delete from event_log where category = 'offline-concepts' and (select count(*) from concept where uuid = (select substr(object, 29, 36))) = 0;`
+delete synonyms for yes/no.
+extract the zip file
+
+
+open connect.
