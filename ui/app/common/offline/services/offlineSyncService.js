@@ -209,11 +209,10 @@ angular.module('bahmni.common.offline')
                 });
             };
 
-            var forceSyncForCategory = function () {
-                var category = "forms";
+            var forceSyncForCategory = function (category) {
                 categories = ["forms"];
                 var marker = {
-                    "markerName": "forms",
+                    "markerName": category,
                     "lastReadEventUuid": null,
                     "filters": [],
                     "lastReadTime": "2022-06-07T06:44:19.637Z"

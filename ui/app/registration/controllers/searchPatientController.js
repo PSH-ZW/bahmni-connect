@@ -2,8 +2,8 @@
 
 angular.module('bahmni.registration')
     .controller('SearchPatientController', ['$rootScope', '$scope', '$location', '$window', 'spinner', 'patientService', 'appService',
-        'messagingService', '$translate', '$filter', 'offlineSyncService', 'ngDialog',
-        function ($rootScope, $scope, $location, $window, spinner, patientService, appService, messagingService, $translate, $filter, offlineSyncService, ngDialog) {
+        'messagingService', '$translate', '$filter', 'offlineSyncService', 'ngDialog', 'offlineConfigInitialization',
+        function ($rootScope, $scope, $location, $window, spinner, patientService, appService, messagingService, $translate, $filter, offlineSyncService, ngDialog, offlineConfigInitialization) {
             $scope.results = [];
             $scope.extraIdentifierTypes = _.filter($rootScope.patientConfiguration.identifierTypes, function (identifierType) {
                 return !identifierType.primary;
@@ -28,8 +28,14 @@ angular.module('bahmni.registration')
             $scope.onToggleRemoteSearch = function (remoteSearch) {
                 $scope.results = [];
             };
-            $scope.onTogglefs = function () {
-                offlineSyncService.forceSyncForCategory();
+            $scope.onTogglefs = function (category = 'forms') {
+                offlineSyncService.forceSyncForCategory(category);
+            };
+            $window.onTogglefs = $scope.onTogglefs;
+            $window.triggerConfigSync = function () {
+                offlineConfigInitialization().then(function () {
+                    console.log('configured');
+                });
             };
             $scope.onClickDownload = function (patient, index) {
                 var pat = $scope.results[index];
@@ -325,13 +331,11 @@ angular.module('bahmni.registration')
                         mapCustomAttributesSearchResults(data);
                         mapAddressAttributesSearchResults(data);
                         mapProgramAttributesSearchResults(data);
-                        if (data.pageOfResults.length === 1) {
-                            var patient = data.pageOfResults[0];
-                            var forwardUrl = appService.getAppDescriptor().getConfigValue("searchByIdForwardUrl") || "/patient/{{patientUuid}}";
-                            $location.url(appService.getAppDescriptor().formatUrl(forwardUrl, {'patientUuid': patient.uuid}));
-                        } else if (data.pageOfResults.length > 1) {
+                        if (data.pageOfResults.length > 0) {
                             $scope.results = data.pageOfResults;
                             $scope.noResultsMessage = null;
+                            // var forwardUrl = appService.getAppDescriptor().getConfigValue("searchByIdForwardUrl") || "/patient/{{patientUuid}}";
+                            // $location.url(appService.getAppDescriptor().formatUrl(forwardUrl, {'patientUuid': patient.uuid}));
                         } else {
                             $scope.patientIdentifier = {'patientIdentifier': patientIdentifier};
                             $scope.noResultsMessage = 'REGISTRATION_LABEL_COULD_NOT_FIND_PATIENT';
